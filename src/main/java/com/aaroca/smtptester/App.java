@@ -1,12 +1,13 @@
 package com.aaroca.smtptester;
 
-import java.util.logging.Logger;
+import com.aaroca.smtptester.ui.views.MainFrame;
+import javax.swing.JFrame;
 
 public class App {
 
-  private static final Logger LOG = Logger.getLogger(App.class.getName());
-
   public static void main(String[] args) {
-    LOG.info("App started");
+    JFrame mainFrame = new MainFrame();
+    mainFrame.pack();
+    mainFrame.setVisible(true);
   }
 }
