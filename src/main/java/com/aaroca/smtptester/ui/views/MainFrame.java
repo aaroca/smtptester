@@ -1,6 +1,7 @@
 package com.aaroca.smtptester.ui.views;
 
 import com.aaroca.smtptester.data.EmailData;
+import com.aaroca.smtptester.tasks.EmailSenderTask;
 import com.aaroca.smtptester.ui.components.FileChooserField;
 import com.aaroca.smtptester.ui.components.FormField;
 import com.aaroca.smtptester.ui.components.SwitchableForm;
@@ -10,12 +11,19 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker.StateValue;
+import org.apache.commons.lang3.StringUtils;
 
 public class MainFrame extends JFrame {
 
@@ -36,6 +44,7 @@ public class MainFrame extends JFrame {
   private FormField sslPort;
   private JButton sendEmail;
   private JButton clearForm;
+  private JProgressBar progressBar;
 
   public MainFrame() {
     init();
@@ -126,7 +135,40 @@ public class MainFrame extends JFrame {
     buttonsPanel.add(sendEmail);
     buttonsPanel.add(clearForm);
 
+    progressBar = new JProgressBar();
+    progressBar.setIndeterminate(true);
+    progressBar.setVisible(false);
+    progressBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+
     add(buttonsPanel);
+    add(progressBar);
+  }
+
+  private void displayProgressBar() {
+    setEnabled(false);
+    progressBar.setVisible(true);
+  }
+
+  private void hideProgressBar() {
+    setEnabled(true);
+    progressBar.setVisible(false);
+  }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    subject.setEnabled(enabled);
+
+    server.setEnabled(enabled);
+    port.setEnabled(enabled);
+    from.setEnabled(enabled);
+    to.setEnabled(enabled);
+    emailDetailsForm.setEnabled(enabled);
+    authenticationForm.setEnabled(enabled);
+    tlsForm.setEnabled(enabled);
+    sslForm.setEnabled(enabled);
+
+    sendEmail.setEnabled(enabled);
+    clearForm.setEnabled(enabled);
   }
 
   private class ClearFormActionListener implements ActionListener {
@@ -153,20 +195,61 @@ public class MainFrame extends JFrame {
 
   private class SendEmailActionListener implements ActionListener {
 
-    private ResultDialog result;
+    private static final char SEPARATION_CHAR = ';';
+
+    private ResultDialog dialog;
 
     public SendEmailActionListener(Frame owner) {
-      result = new ResultDialog(owner);
+      dialog = new ResultDialog(owner);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-      result.pack();
-      result.setVisible(true);
+      displayProgressBar();
+
+      EmailSenderTask task = new EmailSenderTask(collectEmailData());
+      task.addPropertyChangeListener(taskEvent -> {
+        if (StringUtils.equals(taskEvent.getPropertyName(), "state")
+            && StateValue.DONE.equals(taskEvent.getNewValue())) {
+          try {
+            hideProgressBar();
+
+            dialog.setResultingData(task.get());
+            dialog.pack();
+            dialog.setVisible(true);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          } catch (ExecutionException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      task.execute();
     }
 
     private EmailData collectEmailData() {
-      return new EmailData();
+      EmailData email = new EmailData();
+      email.setServer(server.getText());
+      email.setPort(port.getText());
+      email.setTo(getEmailList(to.getText()));
+      email.setFrom(from.getText());
+      email.setDetailedMessage(emailDetailsForm.isSelected());
+      email.setSubject(subject.getText());
+      email.setBody(body.getText());
+      email.setAttachment(attachment.getFile());
+      email.setUseAuthentication(authenticationForm.isSelected());
+      email.setUsername(username.getText());
+      email.setPassword(password.getText());
+      email.setUseTLS(tlsForm.isSelected());
+      email.setTlsPort(tlsPort.getText());
+      email.setUseSSL(sslForm.isSelected());
+      email.setSslPort(sslPort.getText());
+
+      return email;
+    }
+
+    private List<String> getEmailList(String to) {
+      return Arrays.stream(StringUtils.split(to, SEPARATION_CHAR)).collect(Collectors.toList());
     }
   }
 }

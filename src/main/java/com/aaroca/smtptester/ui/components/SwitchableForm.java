@@ -70,4 +70,12 @@ public class SwitchableForm extends JComponent {
   public void clear() {
     checkBox.setSelected(false);
   }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+
+    checkBox.setEnabled(enabled);
+    fields.forEach(field -> field.setEnabled(enabled));
+  }
 }

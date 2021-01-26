@@ -29,6 +29,27 @@
       <version>3.11</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
+    <dependency>
+      <groupId>com.formdev</groupId>
+      <artifactId>flatlaf</artifactId>
+      <version>1.0-rc1</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.github.jiconfont/jiconfont-swing -->
+    <dependency>
+      <groupId>com.github.jiconfont</groupId>
+      <artifactId>jiconfont-swing</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.github.jiconfont/jiconfont-font_awesome -->
+    <dependency>
+      <groupId>com.github.jiconfont</groupId>
+      <artifactId>jiconfont-font_awesome</artifactId>
+      <version>4.7.0.1</version>
+    </dependency>
+
   </dependencies>
 
   <build>
