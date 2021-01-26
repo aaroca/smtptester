@@ -76,6 +76,7 @@ public class SwitchableForm extends JComponent {
     super.setEnabled(enabled);
 
     checkBox.setEnabled(enabled);
+    panel.setEnabled(enabled);
     fields.forEach(field -> field.setEnabled(enabled));
   }
 }
