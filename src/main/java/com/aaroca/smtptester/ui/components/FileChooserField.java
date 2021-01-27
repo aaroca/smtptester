@@ -14,40 +14,18 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import org.apache.commons.lang3.StringUtils;
 
-public class FileChooserField extends JComponent {
+public class FileChooserField extends JComponent implements ActionListener {
 
   private JLabel label;
   private JTextField path;
   private JButton selectButton;
-  private JFileChooser browser;
+  private JFileChooser fileBrowser;
   private File selectedFile;
 
   public FileChooserField(String label) {
-    this.label = new JLabel(label);
-    this.path = new JTextField(DEFAULT_SIZE);
-    this.path.setEnabled(false);
-    this.selectButton = new JButton("Select");
-    this.selectButton.addActionListener(new FileChooserActionListener(selectButton));
-    this.browser = new JFileChooser();
-    this.browser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
     init();
-  }
-
-  private void init() {
-    setLayout(new FlowLayout(FlowLayout.LEFT));
-    setAlignmentX(Component.LEFT_ALIGNMENT);
-
-    addFields();
-  }
-
-  private void addFields() {
-    if (StringUtils.isNotEmpty(label.getText())) {
-      add(label);
-    }
-
-    add(path);
-    add(selectButton);
+    buildComponents(label);
+    addComponents();
   }
 
   @Override
@@ -57,32 +35,49 @@ public class FileChooserField extends JComponent {
     selectButton.setEnabled(enabled);
   }
 
-  public void setLabel(String label) {
-    this.label.setText(label);
-  }
-
-  public File getFile() {
-    return selectedFile;
+  @Override
+  public void actionPerformed(ActionEvent event) {
+    if (event.getSource() == selectButton) {
+      selectAttachment();
+    }
   }
 
   public void clear() {
     path.setText(StringUtils.EMPTY);
   }
 
-  private class FileChooserActionListener implements ActionListener {
+  private void init() {
+    setLayout(new FlowLayout(FlowLayout.LEFT));
+    setAlignmentX(Component.LEFT_ALIGNMENT);
+  }
 
-    private Component parent;
+  private void buildComponents(String label) {
+    this.label = new JLabel(label);
+    this.path = new JTextField(DEFAULT_SIZE);
+    this.path.setEnabled(false);
+    this.selectButton = new JButton("Select");
+    this.selectButton.addActionListener(this);
+    this.fileBrowser = new JFileChooser();
+    this.fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+  }
 
-    private FileChooserActionListener(Component parent) {
-      this.parent = parent;
+  private void addComponents() {
+    if (StringUtils.isNotEmpty(label.getText())) {
+      add(label);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
-      if (browser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
-        selectedFile = browser.getSelectedFile();
-        path.setText(selectedFile.getAbsolutePath());
-      }
+    add(path);
+    add(selectButton);
+  }
+
+  private void selectAttachment() {
+    if (fileBrowser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+      selectedFile = fileBrowser.getSelectedFile();
+      path.setText(selectedFile.getAbsolutePath());
     }
+  }
+
+  public File getFile() {
+    return selectedFile;
   }
 }

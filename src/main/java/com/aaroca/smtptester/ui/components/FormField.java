@@ -21,27 +21,9 @@ public class FormField extends JComponent {
   }
 
   public FormField(String label, JTextComponent field) {
-    Objects.requireNonNull(field);
-
-    this.label = new JLabel(label);
-    this.field = field;
-
     init();
-  }
-
-  private void init() {
-    setLayout(new FlowLayout(FlowLayout.LEFT));
-    setAlignmentX(Component.LEFT_ALIGNMENT);
-
-    addFields();
-  }
-
-  private void addFields() {
-    if (StringUtils.isNotEmpty(label.getText())) {
-      add(label);
-    }
-
-    add(field);
+    buildComponents(label, field);
+    addComponents();
   }
 
   @Override
@@ -51,16 +33,31 @@ public class FormField extends JComponent {
     field.setEnabled(enabled);
   }
 
-  public void setLabel(String label) {
-    this.label.setText(label);
+  public void clear() {
+    field.setText(StringUtils.EMPTY);
   }
 
-  public void setField(JTextComponent field) {
+  private void init() {
+    setLayout(new FlowLayout(FlowLayout.LEFT));
+    setAlignmentX(Component.LEFT_ALIGNMENT);
+  }
+
+  private void buildComponents(String label, JTextComponent field) {
     Objects.requireNonNull(field);
 
+    this.label = new JLabel(label);
     this.field = field;
   }
 
+  private void addComponents() {
+    if (StringUtils.isNotEmpty(label.getText())) {
+      add(label);
+    }
+
+    add(field);
+  }
+
+  @Override
   public void setToolTipText(String tooltip) {
     field.setToolTipText(tooltip);
   }
@@ -71,9 +68,5 @@ public class FormField extends JComponent {
 
   public String getText() {
     return field.getText();
-  }
-
-  public void clear() {
-    field.setText(StringUtils.EMPTY);
   }
 }

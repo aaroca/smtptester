@@ -1,18 +1,18 @@
 package com.aaroca.smtptester.ui.views;
 
-import com.aaroca.smtptester.data.ResultingData;
+import com.aaroca.smtptester.data.ResponseData;
 import java.awt.Frame;
 import java.util.Objects;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-public class ResultDialog extends JDialog {
+public class ResponseDialog extends JDialog {
 
   private JLabel status;
   private JLabel exception;
 
-  public ResultDialog(Frame owner) {
+  public ResponseDialog(Frame owner) {
     super(owner, "Result", true);
 
     init();
@@ -35,13 +35,13 @@ public class ResultDialog extends JDialog {
     add(exception);
   }
 
-  public void setResultingData(ResultingData results) {
-    Objects.requireNonNull(results);
+  public void setResponseData(ResponseData response) {
+    Objects.requireNonNull(response);
 
-    status.setText(results.getStatus());
+    status.setText(response.getStatus());
 
-    if (results.getException() != null) {
-      exception.setText(results.getException().getMessage());
+    if (response.getException() != null) {
+      exception.setText(response.getException().getMessage());
     }
   }
 }

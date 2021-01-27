@@ -18,7 +18,8 @@ public final class Constants {
     private Mail() {
     }
 
-    public static Integer DEFAULT_SSL_PORT = 465;
-    public static Integer DEFAULT_TLS_PORT = 587;
+    public static final char SEPARATION_CHAR = ';';
+    public static final Integer DEFAULT_SSL_PORT = 465;
+    public static final Integer DEFAULT_TLS_PORT = 587;
   }
 }

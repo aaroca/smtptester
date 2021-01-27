@@ -9,66 +9,27 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.apache.commons.lang3.ArrayUtils;
 
-public class SwitchableForm extends JComponent {
+public class SwitchableForm extends JComponent implements ChangeListener {
 
   private JCheckBox checkBox;
   private JPanel panel;
   private List<JComponent> fields;
 
   public SwitchableForm(String label, String title, JComponent... fields) {
-    if (ArrayUtils.isEmpty(fields)) {
-      throw new IllegalArgumentException("Provide at least one field.");
-    }
-
-    this.checkBox = new JCheckBox(label);
-    this.panel = new JPanel();
-    this.panel.setBorder(BorderFactory.createTitledBorder(title));
-    this.fields = Arrays.stream(fields).collect(Collectors.toList());
-
     init();
+    buildComponents(label, title, fields);
+    addComponents();
   }
 
-  private void init() {
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    setAlignmentX(Component.LEFT_ALIGNMENT);
-
-    addSwitch();
-    addContentPanel();
-    addFields();
-  }
-
-  private void addSwitch() {
-    checkBox.addChangeListener(event -> {
-      panel.setEnabled(checkBox.isSelected());
-      fields.forEach(field -> field.setEnabled(checkBox.isSelected()));
-    });
-
-    add(checkBox);
-  }
-
-  private void addContentPanel() {
-    panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
-    panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    panel.setEnabled(false);
-
-    add(panel);
-  }
-
-  private void addFields() {
-    fields.forEach(field -> {
-      field.setEnabled(false);
-      panel.add(field);
-    });
-  }
-
-  public boolean isSelected() {
-    return checkBox.isSelected();
-  }
-
-  public void clear() {
-    checkBox.setSelected(false);
+  @Override
+  public void stateChanged(ChangeEvent event) {
+    if (event.getSource() == checkBox) {
+      toggle();
+    }
   }
 
   @Override
@@ -78,5 +39,47 @@ public class SwitchableForm extends JComponent {
     checkBox.setEnabled(enabled);
     panel.setEnabled(enabled);
     fields.forEach(field -> field.setEnabled(enabled));
+  }
+
+  public void clear() {
+    checkBox.setSelected(false);
+  }
+
+  private void init() {
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    setAlignmentX(Component.LEFT_ALIGNMENT);
+  }
+
+  private void buildComponents(String label, String title, JComponent... fields) {
+    if (ArrayUtils.isEmpty(fields)) {
+      throw new IllegalArgumentException("Provide at least one field.");
+    }
+
+    this.fields = Arrays.stream(fields).collect(Collectors.toList());
+    this.checkBox = new JCheckBox(label);
+    this.checkBox.addChangeListener(this);
+    this.panel = new JPanel();
+    this.panel.setBorder(BorderFactory.createTitledBorder(title));
+    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
+    this.panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    this.panel.setEnabled(false);
+  }
+
+  private void addComponents() {
+    add(this.checkBox);
+    add(this.panel);
+    this.fields.forEach(field -> {
+      field.setEnabled(false);
+      this.panel.add(field);
+    });
+  }
+
+  private void toggle() {
+    this.panel.setEnabled(this.checkBox.isSelected());
+    this.fields.forEach(field -> field.setEnabled(this.checkBox.isSelected()));
+  }
+
+  public boolean isSelected() {
+    return this.checkBox.isSelected();
   }
 }

@@ -2,12 +2,12 @@ package com.aaroca.smtptester.tasks;
 
 import com.aaroca.smtptester.converters.impl.EmailPropertiesConverter;
 import com.aaroca.smtptester.data.EmailData;
-import com.aaroca.smtptester.data.ResultingData;
+import com.aaroca.smtptester.data.ResponseData;
 import com.aaroca.smtptester.services.EmailService;
 import com.aaroca.smtptester.services.impl.DefaultEmailService;
 import javax.swing.SwingWorker;
 
-public class EmailSenderTask extends SwingWorker<ResultingData, String> {
+public class EmailSenderTask extends SwingWorker<ResponseData, String> {
 
   private final EmailService emailService;
   private final EmailData email;
@@ -18,7 +18,7 @@ public class EmailSenderTask extends SwingWorker<ResultingData, String> {
   }
 
   @Override
-  protected ResultingData doInBackground() {
+  protected ResponseData doInBackground() {
     return getEmailService().send(getEmail());
   }
 

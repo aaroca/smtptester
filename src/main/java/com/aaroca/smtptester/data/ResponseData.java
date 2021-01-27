@@ -1,11 +1,14 @@
 package com.aaroca.smtptester.data;
 
-public class ResultingData {
+import java.util.Properties;
+
+public class ResponseData {
   private Boolean success;
   private String status;
+  private Properties sessionProperties;
   private Throwable exception;
 
-  public ResultingData(Boolean success, String status) {
+  public ResponseData(Boolean success, String status) {
     this.success = success;
     this.status = status;
   }
@@ -24,6 +27,14 @@ public class ResultingData {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public Properties getSessionProperties() {
+    return sessionProperties;
+  }
+
+  public void setSessionProperties(Properties sessionProperties) {
+    this.sessionProperties = sessionProperties;
   }
 
   public Throwable getException() {

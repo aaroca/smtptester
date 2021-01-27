@@ -14,9 +14,11 @@ public class App {
   }
 
   private void start() {
+    // Customize UI
     FlatDarculaLaf.install();
     IconFontSwing.register(FontAwesome.getIconFont());
 
+    // Display UI
     SwingUtilities.invokeLater(() -> {
       JFrame mainFrame = new MainFrame();
       mainFrame.setIconImage(IconFontSwing.buildImage(FontAwesome.ENVELOPE, 20));
