@@ -10,12 +10,14 @@ import javax.swing.JLabel;
 public class ResponseDialog extends JDialog {
 
   private JLabel status;
+  private JLabel sessionProperties;
   private JLabel exception;
 
   public ResponseDialog(Frame owner) {
     super(owner, "Result", true);
 
     init();
+    buildComponents();
     addComponents();
   }
 
@@ -27,11 +29,15 @@ public class ResponseDialog extends JDialog {
     setResizable(false);
   }
 
-  private void addComponents() {
+  private void buildComponents() {
     status = new JLabel();
+    sessionProperties = new JLabel();
     exception = new JLabel();
+  }
 
+  private void addComponents() {
     add(status);
+    add(sessionProperties);
     add(exception);
   }
 
@@ -39,6 +45,10 @@ public class ResponseDialog extends JDialog {
     Objects.requireNonNull(response);
 
     status.setText(response.getStatus());
+
+    if (response.getSessionProperties() != null) {
+      sessionProperties.setText(response.getSessionProperties().toString());
+    }
 
     if (response.getException() != null) {
       exception.setText(response.getException().getMessage());

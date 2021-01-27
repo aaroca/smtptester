@@ -16,7 +16,7 @@ import org.apache.commons.lang3.ArrayUtils;
 public class SwitchableForm extends JComponent implements ChangeListener {
 
   private JCheckBox checkBox;
-  private JPanel panel;
+  private JPanel contentPanel;
   private List<JComponent> fields;
 
   public SwitchableForm(String label, String title, JComponent... fields) {
@@ -37,7 +37,7 @@ public class SwitchableForm extends JComponent implements ChangeListener {
     super.setEnabled(enabled);
 
     checkBox.setEnabled(enabled);
-    panel.setEnabled(enabled);
+    contentPanel.setEnabled(enabled);
     fields.forEach(field -> field.setEnabled(enabled));
   }
 
@@ -56,27 +56,27 @@ public class SwitchableForm extends JComponent implements ChangeListener {
     }
 
     this.fields = Arrays.stream(fields).collect(Collectors.toList());
-    this.checkBox = new JCheckBox(label);
-    this.checkBox.addChangeListener(this);
-    this.panel = new JPanel();
-    this.panel.setBorder(BorderFactory.createTitledBorder(title));
-    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
-    this.panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    this.panel.setEnabled(false);
+    checkBox = new JCheckBox(label);
+    checkBox.addChangeListener(this);
+    contentPanel = new JPanel();
+    contentPanel.setBorder(BorderFactory.createTitledBorder(title));
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+    contentPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    contentPanel.setEnabled(false);
   }
 
   private void addComponents() {
-    add(this.checkBox);
-    add(this.panel);
-    this.fields.forEach(field -> {
+    add(checkBox);
+    add(contentPanel);
+    fields.forEach(field -> {
       field.setEnabled(false);
-      this.panel.add(field);
+      contentPanel.add(field);
     });
   }
 
   private void toggle() {
-    this.panel.setEnabled(this.checkBox.isSelected());
-    this.fields.forEach(field -> field.setEnabled(this.checkBox.isSelected()));
+    contentPanel.setEnabled(checkBox.isSelected());
+    fields.forEach(field -> field.setEnabled(checkBox.isSelected()));
   }
 
   public boolean isSelected() {

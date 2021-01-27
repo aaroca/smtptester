@@ -24,7 +24,11 @@ public class DefaultEmailService implements EmailService {
       exception.printStackTrace();
     }
 
-    return new ResponseData(true, "Status");
+    ResponseData response = new ResponseData(true, "Status");
+    response.setException(new IllegalArgumentException("Exception message"));
+    response.setSessionProperties(emailProperties);
+
+    return response;
   }
 
   protected Converter<EmailData, Properties> getPropertiesConverter() {

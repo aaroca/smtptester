@@ -53,12 +53,12 @@ public class FileChooserField extends JComponent implements ActionListener {
 
   private void buildComponents(String label) {
     this.label = new JLabel(label);
-    this.path = new JTextField(DEFAULT_SIZE);
-    this.path.setEnabled(false);
-    this.selectButton = new JButton("Select");
-    this.selectButton.addActionListener(this);
-    this.fileBrowser = new JFileChooser();
-    this.fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    path = new JTextField(DEFAULT_SIZE);
+    path.setEnabled(false);
+    selectButton = new JButton("Select");
+    selectButton.addActionListener(this);
+    fileBrowser = new JFileChooser();
+    fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
   }
 
   private void addComponents() {
