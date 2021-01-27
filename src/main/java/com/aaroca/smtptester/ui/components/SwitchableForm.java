@@ -1,6 +1,7 @@
 package com.aaroca.smtptester.ui.components;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +46,10 @@ public class SwitchableForm extends JComponent implements ChangeListener {
     checkBox.setSelected(false);
   }
 
+  public void addActionListener(ActionListener listener) {
+    checkBox.addActionListener(listener);
+  }
+
   private void init() {
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -81,5 +86,9 @@ public class SwitchableForm extends JComponent implements ChangeListener {
 
   public boolean isSelected() {
     return this.checkBox.isSelected();
+  }
+
+  public JCheckBox getEventSource() {
+    return checkBox;
   }
 }

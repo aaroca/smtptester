@@ -29,7 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 public class MainFrame extends JFrame implements ActionListener {
 
   private ResponseDialog responseDialog;
-  private FormField server;
+  private FormField host;
   private FormField port;
   private FormField to;
   private FormField from;
@@ -60,6 +60,10 @@ public class MainFrame extends JFrame implements ActionListener {
       clear();
     } else if (event.getSource() == sendEmail) {
       runEmailTask();
+    } else if (event.getSource() == tlsForm.getEventSource()) {
+      sslForm.clear();
+    } else if (event.getSource() == sslForm.getEventSource()) {
+      tlsForm.clear();
     }
   }
 
@@ -67,7 +71,7 @@ public class MainFrame extends JFrame implements ActionListener {
   public void setEnabled(boolean enabled) {
     super.setEnabled(enabled);
 
-    server.setEnabled(enabled);
+    host.setEnabled(enabled);
     port.setEnabled(enabled);
     from.setEnabled(enabled);
     to.setEnabled(enabled);
@@ -91,7 +95,7 @@ public class MainFrame extends JFrame implements ActionListener {
   private void buildComponents() {
     // Basic details
     responseDialog = new ResponseDialog(this);
-    server = new FormField("Server");
+    host = new FormField("Host");
     port = new FormField("Port");
     from = new FormField("From");
     to = new FormField("To");
@@ -119,11 +123,13 @@ public class MainFrame extends JFrame implements ActionListener {
     tlsPort = new FormField("Port");
     tlsPort.setText(Mail.DEFAULT_TLS_PORT.toString());
     tlsForm = new SwitchableForm("Use TLS", "TLS", tlsPort);
+    tlsForm.addActionListener(this);
 
     // Use SSL form
     sslPort = new FormField("Port");
     sslPort.setText(Mail.DEFAULT_SSL_PORT.toString());
     sslForm = new SwitchableForm("Use SSL", "SSL", sslPort);
+    sslForm.addActionListener(this);
 
     // Buttons
     sendEmail = new JButton("Send");
@@ -138,7 +144,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
   private void addComponents() {
     // Basic details
-    add(server);
+    add(host);
     add(port);
     add(from);
     add(to);
@@ -170,7 +176,7 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   private void clear() {
-    server.clear();
+    host.clear();
     port.clear();
     to.clear();
     from.clear();
@@ -210,7 +216,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
   private EmailData collectEmailData() {
     EmailData email = new EmailData();
-    email.setServer(server.getText());
+    email.setServer(host.getText());
     email.setPort(port.getText());
     email.setTo(getEmailList(to.getText()));
     email.setFrom(from.getText());
