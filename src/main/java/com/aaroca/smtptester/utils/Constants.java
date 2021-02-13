@@ -13,6 +13,8 @@ public final class Constants {
     public static final Integer DEFAULT_SEPARATION = 10;
     public static final Integer DEFAULT_TEXT_SIZE = 20;
     public static final Integer DEFAULT_ICON_SIZE = 20;
+    public static final Integer SMALL_ICON_SIZE = 15;
+    public static final Integer EXTRA_SMALL_ICON_SIZE = 10;
   }
 
   public static final class Mail {

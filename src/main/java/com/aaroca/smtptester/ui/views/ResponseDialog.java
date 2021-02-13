@@ -22,7 +22,6 @@ public class ResponseDialog extends JDialog {
 
   private JPanel panel;
   private JLabel status;
-  private JTextArea sessionProperties;
   private JTextArea exception;
 
   public ResponseDialog(Frame owner) {
@@ -50,9 +49,6 @@ public class ResponseDialog extends JDialog {
     status = new JLabel();
     status.setAlignmentX(Component.LEFT_ALIGNMENT);
     status.setIconTextGap(Ui.DEFAULT_SEPARATION);
-    sessionProperties = new JTextArea();
-    sessionProperties.setAlignmentX(Component.LEFT_ALIGNMENT);
-    sessionProperties.setEditable(false);
     exception = new JTextArea();
     exception.setAlignmentX(Component.LEFT_ALIGNMENT);
     exception.setEditable(false);
@@ -63,7 +59,6 @@ public class ResponseDialog extends JDialog {
   private void addComponents() {
     add(panel);
     panel.add(status);
-    panel.add(sessionProperties);
     panel.add(exception);
   }
 
@@ -85,10 +80,6 @@ public class ResponseDialog extends JDialog {
     setIconImage(image);
     status.setIcon(icon);
     status.setText(response.getStatus());
-
-    if (response.getSession() != null) {
-      sessionProperties.setText(response.getSession().getProperties().toString());
-    }
 
     if (response.getException() != null) {
       exception.setText(ExceptionUtils.getStackTrace(response.getException()));

@@ -43,8 +43,6 @@ public class DefaultEmailService implements EmailService {
       response.setException(exception);
     }
 
-    response.setSession(session);
-
     return response;
   }
 

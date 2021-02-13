@@ -17,6 +17,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
@@ -26,8 +29,13 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MainFrame extends JFrame implements ActionListener {
 
+  private JMenuBar mainMenu;
+  private JMenu fileMenu;
+  private JMenuItem exportMenuItem;
+  private JMenuItem exitMenuItem;
   private JPanel panel;
   private ResponseDialog responseDialog;
+  private PropertiesDialog propertiesDialog;
   private FormField host;
   private FormField port;
   private FormField to;
@@ -58,17 +66,13 @@ public class MainFrame extends JFrame implements ActionListener {
     } else if (event.getSource() == sendEmail) {
       runEmailTask();
     } else if (event.getSource() == useTLS) {
-      if (useTLS.isSelected()) {
-        port.setText(Mail.DEFAULT_TLS_PORT.toString());
-      }
-
-      useSSL.setSelected(false);
+      useTLS();
     } else if (event.getSource() == useSSL) {
-      if (useSSL.isSelected()) {
-        port.setText(Mail.DEFAULT_SSL_PORT.toString());
-      }
-
-      useTLS.setSelected(false);
+      useSSL();
+    } else if (event.getSource() == exportMenuItem) {
+      exportProperties();
+    } else if (event.getSource() == exitMenuItem) {
+      dispose();
     }
   }
 
@@ -98,13 +102,31 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   private void buildComponents() {
-    // Basic details
+    // Dialogs
+    responseDialog = new ResponseDialog(this);
+    propertiesDialog = new PropertiesDialog(this);
+
+    // Menu
+    mainMenu = new JMenuBar();
+    fileMenu = new JMenu("File");
+    exportMenuItem = new JMenuItem("Export");
+    exportMenuItem.addActionListener(this);
+    exitMenuItem = new JMenuItem("Exit");
+    exitMenuItem.addActionListener(this);
+
+    fileMenu.add(exportMenuItem);
+    fileMenu.addSeparator();
+    fileMenu.add(exitMenuItem);
+    mainMenu.add(fileMenu);
+
+    // Panel
     panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     panel.setBorder(BorderFactory
         .createEmptyBorder(Ui.DEFAULT_SEPARATION, Ui.DEFAULT_SEPARATION, Ui.DEFAULT_SEPARATION,
             Ui.DEFAULT_SEPARATION));
-    responseDialog = new ResponseDialog(this);
+
+    // Basic details
     host = new FormField("Host");
     port = new FormField("Port");
     port.setText(Mail.DEFAULT_PORT.toString());
@@ -150,6 +172,10 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   private void addComponents() {
+    // Menu
+    setJMenuBar(mainMenu);
+
+    // Panel
     add(panel);
 
     // Basic details
@@ -219,6 +245,28 @@ public class MainFrame extends JFrame implements ActionListener {
       }
     });
     task.execute();
+  }
+
+  private void useSSL() {
+    if (useSSL.isSelected()) {
+      port.setText(Mail.DEFAULT_SSL_PORT.toString());
+    }
+
+    useTLS.setSelected(false);
+  }
+
+  private void useTLS() {
+    if (useTLS.isSelected()) {
+      port.setText(Mail.DEFAULT_TLS_PORT.toString());
+    }
+
+    useSSL.setSelected(false);
+  }
+
+  private void exportProperties() {
+    propertiesDialog.exportProperties(collectEmailData());
+    propertiesDialog.pack();
+    propertiesDialog.setVisible(true);
   }
 
   private EmailData collectEmailData() {

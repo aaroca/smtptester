@@ -2,6 +2,7 @@ package com.aaroca.smtptester.ui.components;
 
 import static com.aaroca.smtptester.utils.Constants.Ui.DEFAULT_TEXT_SIZE;
 
+import com.aaroca.smtptester.utils.Constants.Ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -69,7 +70,8 @@ public class FormField extends JComponent {
   public void setInfo(String info) {
     if (StringUtils.isNotEmpty(info)) {
       if (this.info == null) {
-        this.info = new JLabel(IconFontSwing.buildIcon(FontAwesome.INFO_CIRCLE, 15, Color.white));
+        this.info = new JLabel(
+            IconFontSwing.buildIcon(FontAwesome.INFO_CIRCLE, Ui.SMALL_ICON_SIZE, Color.white));
         add(this.info);
       }
 
