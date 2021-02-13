@@ -22,12 +22,16 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 public class ResponseDialog extends JDialog {
 
+  private final I18nService i18nService;
+
   private JPanel panel;
   private JLabel status;
   private JTextArea exception;
 
   public ResponseDialog(Frame owner) {
     super(owner, "", true);
+
+    i18nService = DefaultI18nService.getInstance();
 
     init();
     buildComponents();
@@ -90,6 +94,6 @@ public class ResponseDialog extends JDialog {
   }
 
   protected I18nService getI18nService() {
-    return DefaultI18nService.getInstance();
+    return i18nService;
   }
 }

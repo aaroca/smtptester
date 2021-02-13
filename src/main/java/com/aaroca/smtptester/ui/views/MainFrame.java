@@ -31,6 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MainFrame extends JFrame implements ActionListener {
 
+  private final I18nService i18nService;
+
   private JMenuBar mainMenu;
   private JMenu fileMenu;
   private JMenuItem exportMenuItem;
@@ -56,6 +58,8 @@ public class MainFrame extends JFrame implements ActionListener {
   private JProgressBar progressBar;
 
   public MainFrame() {
+    i18nService = DefaultI18nService.getInstance();
+
     init();
     buildComponents();
     addComponents();
@@ -291,6 +295,6 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   protected I18nService getI18nService() {
-    return DefaultI18nService.getInstance();
+    return i18nService;
   }
 }

@@ -27,6 +27,7 @@ import jiconfont.swing.IconFontSwing;
 
 public class PropertiesDialog extends JDialog implements ActionListener {
 
+  private final I18nService i18nService;
   private final Converter<EmailData, Properties> propertiesConverter;
 
   private JPanel panel;
@@ -37,6 +38,7 @@ public class PropertiesDialog extends JDialog implements ActionListener {
   public PropertiesDialog(Frame owner) {
     super(owner, "", true);
 
+    i18nService = DefaultI18nService.getInstance();
     propertiesConverter = new EmailPropertiesConverter();
 
     init();
@@ -125,6 +127,6 @@ public class PropertiesDialog extends JDialog implements ActionListener {
   }
 
   protected I18nService getI18nService() {
-    return DefaultI18nService.getInstance();
+    return i18nService;
   }
 }
