@@ -1,12 +1,12 @@
 package com.aaroca.smtptester.data;
 
 import java.io.File;
-import java.util.List;
 
 public class EmailData {
-  private String server;
+
+  private String host;
   private String port;
-  private List<String> to;
+  private String to;
   private String from;
   private Boolean detailedMessage;
   private String subject;
@@ -16,16 +16,14 @@ public class EmailData {
   private String username;
   private String password;
   private Boolean useTLS;
-  private String tlsPort;
   private Boolean useSSL;
-  private String sslPort;
 
-  public String getServer() {
-    return server;
+  public String getHost() {
+    return host;
   }
 
-  public void setServer(String server) {
-    this.server = server;
+  public void setHost(String host) {
+    this.host = host;
   }
 
   public String getPort() {
@@ -36,11 +34,11 @@ public class EmailData {
     this.port = port;
   }
 
-  public List<String> getTo() {
+  public String getTo() {
     return to;
   }
 
-  public void setTo(List<String> to) {
+  public void setTo(String to) {
     this.to = to;
   }
 
@@ -116,27 +114,11 @@ public class EmailData {
     this.useTLS = useTLS;
   }
 
-  public String getTlsPort() {
-    return tlsPort;
-  }
-
-  public void setTlsPort(String tlsPort) {
-    this.tlsPort = tlsPort;
-  }
-
   public Boolean isUsingSSL() {
     return useSSL;
   }
 
   public void setUseSSL(Boolean useSSL) {
     this.useSSL = useSSL;
-  }
-
-  public String getSslPort() {
-    return sslPort;
-  }
-
-  public void setSslPort(String sslPort) {
-    this.sslPort = sslPort;
   }
 }

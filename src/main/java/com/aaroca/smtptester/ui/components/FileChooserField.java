@@ -1,6 +1,6 @@
 package com.aaroca.smtptester.ui.components;
 
-import static com.aaroca.smtptester.utils.Constants.Ui.DEFAULT_SIZE;
+import static com.aaroca.smtptester.utils.Constants.Ui.DEFAULT_TEXT_SIZE;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -53,7 +53,7 @@ public class FileChooserField extends JComponent implements ActionListener {
 
   private void buildComponents(String label) {
     this.label = new JLabel(label);
-    path = new JTextField(DEFAULT_SIZE);
+    path = new JTextField(DEFAULT_TEXT_SIZE);
     path.setEnabled(false);
     selectButton = new JButton("Select");
     selectButton.addActionListener(this);

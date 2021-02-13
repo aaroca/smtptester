@@ -1,7 +1,5 @@
 package com.aaroca.smtptester.ui.views;
 
-import static com.aaroca.smtptester.utils.Constants.Mail.SEPARATION_CHAR;
-
 import com.aaroca.smtptester.data.EmailData;
 import com.aaroca.smtptester.tasks.EmailSenderTask;
 import com.aaroca.smtptester.ui.components.FileChooserField;
@@ -12,12 +10,10 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -40,10 +36,8 @@ public class MainFrame extends JFrame implements ActionListener {
   private SwitchableForm authenticationForm;
   private FormField username;
   private FormField password;
-  private SwitchableForm tlsForm;
-  private FormField tlsPort;
-  private SwitchableForm sslForm;
-  private FormField sslPort;
+  private JCheckBox useTLS;
+  private JCheckBox useSSL;
   private JButton sendEmail;
   private JButton clearForm;
   private JProgressBar progressBar;
@@ -60,10 +54,18 @@ public class MainFrame extends JFrame implements ActionListener {
       clear();
     } else if (event.getSource() == sendEmail) {
       runEmailTask();
-    } else if (event.getSource() == tlsForm.getEventSource()) {
-      sslForm.clear();
-    } else if (event.getSource() == sslForm.getEventSource()) {
-      tlsForm.clear();
+    } else if (event.getSource() == useTLS) {
+      if (useTLS.isSelected()) {
+        port.setText(Mail.DEFAULT_TLS_PORT.toString());
+      }
+
+      useSSL.setSelected(false);
+    } else if (event.getSource() == useSSL) {
+      if (useSSL.isSelected()) {
+        port.setText(Mail.DEFAULT_SSL_PORT.toString());
+      }
+
+      useTLS.setSelected(false);
     }
   }
 
@@ -77,8 +79,8 @@ public class MainFrame extends JFrame implements ActionListener {
     to.setEnabled(enabled);
     emailDetailsForm.setEnabled(enabled);
     authenticationForm.setEnabled(enabled);
-    tlsForm.setEnabled(enabled);
-    sslForm.setEnabled(enabled);
+    useTLS.setEnabled(enabled);
+    useSSL.setEnabled(enabled);
     sendEmail.setEnabled(enabled);
     clearForm.setEnabled(enabled);
   }
@@ -97,9 +99,10 @@ public class MainFrame extends JFrame implements ActionListener {
     responseDialog = new ResponseDialog(this);
     host = new FormField("Host");
     port = new FormField("Port");
+    port.setText(Mail.DEFAULT_PORT.toString());
     from = new FormField("From");
     to = new FormField("To");
-    to.setToolTipText("Separate with ; for sending several emails");
+    to.setInfo("Separate with , for sending several emails");
 
     // Email details form
     subject = new FormField("Subject");
@@ -120,16 +123,12 @@ public class MainFrame extends JFrame implements ActionListener {
         password);
 
     // Use TLS form
-    tlsPort = new FormField("Port");
-    tlsPort.setText(Mail.DEFAULT_TLS_PORT.toString());
-    tlsForm = new SwitchableForm("Use TLS", "TLS", tlsPort);
-    tlsForm.addActionListener(this);
+    useTLS = new JCheckBox("Use TLS");
+    useTLS.addActionListener(this);
 
     // Use SSL form
-    sslPort = new FormField("Port");
-    sslPort.setText(Mail.DEFAULT_SSL_PORT.toString());
-    sslForm = new SwitchableForm("Use SSL", "SSL", sslPort);
-    sslForm.addActionListener(this);
+    useSSL = new JCheckBox("Use SSL");
+    useSSL.addActionListener(this);
 
     // Buttons
     sendEmail = new JButton("Send");
@@ -146,14 +145,14 @@ public class MainFrame extends JFrame implements ActionListener {
     // Basic details
     add(host);
     add(port);
+    add(useTLS);
+    add(useSSL);
     add(from);
     add(to);
 
     // Forms
     add(emailDetailsForm);
     add(authenticationForm);
-    add(tlsForm);
-    add(sslForm);
 
     // Buttons
     JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -178,6 +177,8 @@ public class MainFrame extends JFrame implements ActionListener {
   private void clear() {
     host.clear();
     port.clear();
+    useTLS.setSelected(false);
+    useSSL.setSelected(false);
     to.clear();
     from.clear();
     emailDetailsForm.clear();
@@ -187,10 +188,6 @@ public class MainFrame extends JFrame implements ActionListener {
     authenticationForm.clear();
     username.clear();
     password.clear();
-    tlsForm.clear();
-    tlsPort.setText(Mail.DEFAULT_TLS_PORT.toString());
-    sslForm.clear();
-    sslPort.setText(Mail.DEFAULT_SSL_PORT.toString());
   }
 
   private void runEmailTask() {
@@ -216,9 +213,9 @@ public class MainFrame extends JFrame implements ActionListener {
 
   private EmailData collectEmailData() {
     EmailData email = new EmailData();
-    email.setServer(host.getText());
+    email.setHost(host.getText());
     email.setPort(port.getText());
-    email.setTo(getEmailList(to.getText()));
+    email.setTo(to.getText());
     email.setFrom(from.getText());
     email.setDetailedMessage(emailDetailsForm.isSelected());
     email.setSubject(subject.getText());
@@ -227,15 +224,9 @@ public class MainFrame extends JFrame implements ActionListener {
     email.setUseAuthentication(authenticationForm.isSelected());
     email.setUsername(username.getText());
     email.setPassword(password.getText());
-    email.setUseTLS(tlsForm.isSelected());
-    email.setTlsPort(tlsPort.getText());
-    email.setUseSSL(sslForm.isSelected());
-    email.setSslPort(sslPort.getText());
+    email.setUseTLS(useTLS.isSelected());
+    email.setUseSSL(useSSL.isSelected());
 
     return email;
-  }
-
-  private List<String> getEmailList(String to) {
-    return Arrays.stream(StringUtils.split(to, SEPARATION_CHAR)).collect(Collectors.toList());
   }
 }

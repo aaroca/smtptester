@@ -1,7 +1,8 @@
 package com.aaroca.smtptester.ui.components;
 
-import static com.aaroca.smtptester.utils.Constants.Ui.DEFAULT_SIZE;
+import static com.aaroca.smtptester.utils.Constants.Ui.DEFAULT_TEXT_SIZE;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.util.Objects;
@@ -9,15 +10,18 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import org.apache.commons.lang3.StringUtils;
 
 public class FormField extends JComponent {
 
   private JLabel label;
   private JTextComponent field;
+  private JLabel info;
 
   public FormField(String label) {
-    this(label, new JTextField(DEFAULT_SIZE));
+    this(label, new JTextField(DEFAULT_TEXT_SIZE));
   }
 
   public FormField(String label, JTextComponent field) {
@@ -60,6 +64,20 @@ public class FormField extends JComponent {
   @Override
   public void setToolTipText(String tooltip) {
     field.setToolTipText(tooltip);
+  }
+
+  public void setInfo(String info) {
+    if (StringUtils.isNotEmpty(info)) {
+      if (this.info == null) {
+        this.info = new JLabel(IconFontSwing.buildIcon(FontAwesome.INFO_CIRCLE, 15, Color.white));
+        add(this.info);
+      }
+
+      this.info.setToolTipText(info);
+    } else if (this.info.isVisible()) {
+      remove(this.info);
+      this.info = null;
+    }
   }
 
   public void setText(String text) {

@@ -1,5 +1,6 @@
 package com.aaroca.smtptester.tasks;
 
+import com.aaroca.smtptester.converters.impl.EmailAuthenticationConverter;
 import com.aaroca.smtptester.converters.impl.EmailPropertiesConverter;
 import com.aaroca.smtptester.data.EmailData;
 import com.aaroca.smtptester.data.ResponseData;
@@ -14,7 +15,8 @@ public class EmailSenderTask extends SwingWorker<ResponseData, String> {
 
   public EmailSenderTask(EmailData email) {
     this.email = email;
-    this.emailService = new DefaultEmailService(new EmailPropertiesConverter());
+    this.emailService = new DefaultEmailService(new EmailPropertiesConverter(),
+        new EmailAuthenticationConverter());
   }
 
   @Override

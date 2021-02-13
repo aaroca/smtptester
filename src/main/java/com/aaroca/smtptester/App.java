@@ -1,6 +1,7 @@
 package com.aaroca.smtptester;
 
 import com.aaroca.smtptester.ui.views.MainFrame;
+import com.aaroca.smtptester.utils.Constants.Ui;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -21,7 +22,7 @@ public class App {
     // Display UI
     SwingUtilities.invokeLater(() -> {
       JFrame mainFrame = new MainFrame();
-      mainFrame.setIconImage(IconFontSwing.buildImage(FontAwesome.ENVELOPE, 20));
+      mainFrame.setIconImage(IconFontSwing.buildImage(FontAwesome.ENVELOPE, Ui.DEFAULT_ICON_SIZE));
       mainFrame.pack();
       mainFrame.setVisible(true);
     });

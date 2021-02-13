@@ -11,9 +11,21 @@ public class EmailPropertiesConverter implements Converter<EmailData, Properties
   public Properties convert(EmailData emailData) {
     Objects.requireNonNull(emailData);
 
-    Properties target = new Properties();
+    Properties properties = new Properties();
+    properties.put("mail.smtp.host", emailData.getHost());
+    properties.put("mail.smtp.port", emailData.getPort());
 
+    if (emailData.isUsingAuthentication()) {
+      properties.put("mail.smtp.auth", "true");
+    }
 
-    return target;
+    if (emailData.isUsingSSL()) {
+      properties.put("mail.smtp.socketFactory.port", emailData.getPort());
+      properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+    } else if (emailData.isUsingTLS()) {
+      properties.put("mail.smtp.starttls.enable", "true");
+    }
+
+    return properties;
   }
 }

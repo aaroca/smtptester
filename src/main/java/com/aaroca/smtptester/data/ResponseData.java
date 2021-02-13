@@ -1,11 +1,12 @@
 package com.aaroca.smtptester.data;
 
-import java.util.Properties;
+import javax.mail.Session;
 
 public class ResponseData {
+
   private Boolean success;
   private String status;
-  private Properties sessionProperties;
+  private Session session;
   private Throwable exception;
 
   public ResponseData(Boolean success, String status) {
@@ -29,12 +30,12 @@ public class ResponseData {
     this.status = status;
   }
 
-  public Properties getSessionProperties() {
-    return sessionProperties;
+  public Session getSession() {
+    return session;
   }
 
-  public void setSessionProperties(Properties sessionProperties) {
-    this.sessionProperties = sessionProperties;
+  public void setSession(Session session) {
+    this.session = session;
   }
 
   public Throwable getException() {

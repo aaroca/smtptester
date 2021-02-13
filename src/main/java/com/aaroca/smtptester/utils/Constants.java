@@ -10,7 +10,8 @@ public final class Constants {
     private Ui() {
     }
 
-    public static final Integer DEFAULT_SIZE = 20;
+    public static final Integer DEFAULT_TEXT_SIZE = 20;
+    public static final Integer DEFAULT_ICON_SIZE = 20;
   }
 
   public static final class Mail {
@@ -18,7 +19,7 @@ public final class Constants {
     private Mail() {
     }
 
-    public static final char SEPARATION_CHAR = ';';
+    public static final Integer DEFAULT_PORT = 25;
     public static final Integer DEFAULT_SSL_PORT = 465;
     public static final Integer DEFAULT_TLS_PORT = 587;
   }
