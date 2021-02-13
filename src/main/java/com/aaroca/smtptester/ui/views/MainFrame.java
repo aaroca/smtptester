@@ -6,11 +6,13 @@ import com.aaroca.smtptester.ui.components.FileChooserField;
 import com.aaroca.smtptester.ui.components.FormField;
 import com.aaroca.smtptester.ui.components.SwitchableForm;
 import com.aaroca.smtptester.utils.Constants.Mail;
+import com.aaroca.smtptester.utils.Constants.Ui;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutionException;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -24,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MainFrame extends JFrame implements ActionListener {
 
+  private JPanel panel;
   private ResponseDialog responseDialog;
   private FormField host;
   private FormField port;
@@ -96,6 +99,11 @@ public class MainFrame extends JFrame implements ActionListener {
 
   private void buildComponents() {
     // Basic details
+    panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory
+        .createEmptyBorder(Ui.DEFAULT_SEPARATION, Ui.DEFAULT_SEPARATION, Ui.DEFAULT_SEPARATION,
+            Ui.DEFAULT_SEPARATION));
     responseDialog = new ResponseDialog(this);
     host = new FormField("Host");
     port = new FormField("Port");
@@ -142,17 +150,19 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   private void addComponents() {
+    add(panel);
+
     // Basic details
-    add(host);
-    add(port);
-    add(useTLS);
-    add(useSSL);
-    add(from);
-    add(to);
+    panel.add(host);
+    panel.add(port);
+    panel.add(useTLS);
+    panel.add(useSSL);
+    panel.add(from);
+    panel.add(to);
 
     // Forms
-    add(emailDetailsForm);
-    add(authenticationForm);
+    panel.add(emailDetailsForm);
+    panel.add(authenticationForm);
 
     // Buttons
     JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -160,7 +170,7 @@ public class MainFrame extends JFrame implements ActionListener {
     buttonsPanel.add(sendEmail);
     buttonsPanel.add(clearForm);
 
-    add(buttonsPanel);
+    panel.add(buttonsPanel);
     add(progressBar);
   }
 

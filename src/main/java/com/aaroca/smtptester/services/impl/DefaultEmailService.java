@@ -4,6 +4,7 @@ import com.aaroca.smtptester.converters.Converter;
 import com.aaroca.smtptester.data.EmailData;
 import com.aaroca.smtptester.data.ResponseData;
 import com.aaroca.smtptester.services.EmailService;
+import com.aaroca.smtptester.utils.Constants.Mail;
 import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -59,10 +60,11 @@ public class DefaultEmailService implements EmailService {
 
     message.setFrom(new InternetAddress(email.getFrom()));
     message.setRecipients(RecipientType.TO, InternetAddress.parse(email.getTo()));
+    message.setContent(Mail.DEFAULT_CONTENT, Mail.HTML_MIMETYPE);
 
     if (email.isDetailedMessage()) {
       message.setSubject(email.getSubject());
-      message.setText(email.getBody());
+      message.setContent(email.getBody(), Mail.HTML_MIMETYPE);
     }
 
     return message;
