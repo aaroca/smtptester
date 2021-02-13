@@ -3,6 +3,8 @@ package com.aaroca.smtptester.ui.views;
 import com.aaroca.smtptester.converters.Converter;
 import com.aaroca.smtptester.converters.impl.EmailPropertiesConverter;
 import com.aaroca.smtptester.data.EmailData;
+import com.aaroca.smtptester.services.I18nService;
+import com.aaroca.smtptester.services.impl.DefaultI18nService;
 import com.aaroca.smtptester.utils.Constants.Ui;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,14 +27,15 @@ import jiconfont.swing.IconFontSwing;
 
 public class PropertiesDialog extends JDialog implements ActionListener {
 
+  private final Converter<EmailData, Properties> propertiesConverter;
+
   private JPanel panel;
   private JTextArea properties;
   private JButton clipboardButton;
   private Icon clipboardFeedback;
-  private final Converter<EmailData, Properties> propertiesConverter;
 
   public PropertiesDialog(Frame owner) {
-    super(owner, "Exported properties", true);
+    super(owner, "", true);
 
     propertiesConverter = new EmailPropertiesConverter();
 
@@ -48,7 +51,14 @@ public class PropertiesDialog extends JDialog implements ActionListener {
     }
   }
 
+  @Override
+  public void dispose() {
+    clipboardButton.setIcon(null);
+    super.dispose();
+  }
+
   private void init() {
+    setTitle(getI18nService().getString("export.title"));
     setSize(300, 200);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -66,7 +76,7 @@ public class PropertiesDialog extends JDialog implements ActionListener {
     properties = new JTextArea(5, Ui.DEFAULT_TEXT_SIZE);
     properties.setEditable(false);
     properties.setAutoscrolls(true);
-    clipboardButton = new JButton("Copy to clipboard");
+    clipboardButton = new JButton(getI18nService().getString("export.clipboard"));
     clipboardButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     clipboardButton.addActionListener(this);
     clipboardFeedback = IconFontSwing
@@ -95,7 +105,7 @@ public class PropertiesDialog extends JDialog implements ActionListener {
           .map(key -> key + "=" + properties.get(key) + "\r\n")
           .forEach(formattedProperties::append);
     } else {
-      formattedProperties.append("Nothing to display");
+      formattedProperties.append(getI18nService().getString("export.empty"));
     }
 
     return formattedProperties.toString();
@@ -112,5 +122,9 @@ public class PropertiesDialog extends JDialog implements ActionListener {
 
   protected Converter<EmailData, Properties> getPropertiesConverter() {
     return propertiesConverter;
+  }
+
+  protected I18nService getI18nService() {
+    return DefaultI18nService.getInstance();
   }
 }

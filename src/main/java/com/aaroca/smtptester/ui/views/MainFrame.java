@@ -1,6 +1,8 @@
 package com.aaroca.smtptester.ui.views;
 
 import com.aaroca.smtptester.data.EmailData;
+import com.aaroca.smtptester.services.I18nService;
+import com.aaroca.smtptester.services.impl.DefaultI18nService;
 import com.aaroca.smtptester.tasks.EmailSenderTask;
 import com.aaroca.smtptester.ui.components.FileChooserField;
 import com.aaroca.smtptester.ui.components.FormField;
@@ -93,7 +95,7 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   private void init() {
-    setTitle("smtptester");
+    setTitle(getI18nService().getString("main.title"));
     setSize(600, 800);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -161,7 +163,7 @@ public class MainFrame extends JFrame implements ActionListener {
     useSSL.addActionListener(this);
 
     // Buttons
-    sendEmail = new JButton("Send");
+    sendEmail = new JButton(getI18nService().getString("send"));
     sendEmail.addActionListener(this);
     clearForm = new JButton("Clear");
     clearForm.addActionListener(this);
@@ -286,5 +288,9 @@ public class MainFrame extends JFrame implements ActionListener {
     email.setUseSSL(useSSL.isSelected());
 
     return email;
+  }
+
+  protected I18nService getI18nService() {
+    return DefaultI18nService.getInstance();
   }
 }

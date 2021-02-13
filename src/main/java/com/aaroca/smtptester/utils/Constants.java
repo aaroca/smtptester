@@ -5,6 +5,14 @@ public final class Constants {
   private Constants() {
   }
 
+  public static final class App {
+
+    private App() {
+    }
+
+    public static final String DEFAULT_I18N_BASENAME = "i18n/messages";
+  }
+
   public static final class Ui {
 
     private Ui() {

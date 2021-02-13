@@ -1,6 +1,8 @@
 package com.aaroca.smtptester.ui.views;
 
 import com.aaroca.smtptester.data.ResponseData;
+import com.aaroca.smtptester.services.I18nService;
+import com.aaroca.smtptester.services.impl.DefaultI18nService;
 import com.aaroca.smtptester.utils.Constants.Ui;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,7 +27,7 @@ public class ResponseDialog extends JDialog {
   private JTextArea exception;
 
   public ResponseDialog(Frame owner) {
-    super(owner, "Result", true);
+    super(owner, "", true);
 
     init();
     buildComponents();
@@ -33,6 +35,7 @@ public class ResponseDialog extends JDialog {
   }
 
   private void init() {
+    setTitle(getI18nService().getString("response.title"));
     setSize(300, 200);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -84,5 +87,9 @@ public class ResponseDialog extends JDialog {
     if (response.getException() != null) {
       exception.setText(ExceptionUtils.getStackTrace(response.getException()));
     }
+  }
+
+  protected I18nService getI18nService() {
+    return DefaultI18nService.getInstance();
   }
 }
