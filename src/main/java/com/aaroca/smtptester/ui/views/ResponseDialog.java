@@ -91,7 +91,10 @@ public class ResponseDialog extends JDialog {
     status.setText(response.getStatus());
 
     if (response.getException() != null) {
+      exception.setVisible(true);
       exception.setText(ExceptionUtils.getStackTrace(response.getException()));
+    } else {
+      exception.setVisible(false);
     }
   }
 

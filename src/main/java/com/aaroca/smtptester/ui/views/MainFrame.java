@@ -111,17 +111,6 @@ public class MainFrame extends JFrame implements ActionListener {
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     setResizable(false);
-    addWindowListener(new WindowAdapter() {
-      @Override
-      public void windowOpened(WindowEvent event) {
-        host.requestFocus();
-      }
-
-      @Override
-      public void windowActivated(WindowEvent event) {
-        host.requestFocus();
-      }
-    });
   }
 
   private void buildComponents() {
@@ -134,6 +123,7 @@ public class MainFrame extends JFrame implements ActionListener {
     fileMenu = new JMenu(getI18nService().getString("main.file"));
     timeoutComboBox = new JComboBox<>(Mail.TIMEOUT_OPTIONS);
     timeoutComboBox.setEditable(true);
+    timeoutComboBox.setFocusable(false);
     exportMenuItem = new JMenuItem(getI18nService().getString("main.export"));
     exportMenuItem.addActionListener(this);
     exitMenuItem = new JMenuItem(getI18nService().getString("main.exit"));
