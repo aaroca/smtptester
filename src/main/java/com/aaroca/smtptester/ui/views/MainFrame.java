@@ -194,7 +194,7 @@ public class MainFrame extends JFrame implements ActionListener {
     sendEmail.addActionListener(this);
     clearForm = new JButton(getI18nService().getString("main.clear"));
     clearForm.addActionListener(this);
-    debug = new JCheckBox("Enable debug");
+    debug = new JCheckBox(getI18nService().getString("main.debug"));
     debug.addActionListener(this);
     progressBar = new JProgressBar();
     progressBar.setIndeterminate(true);
@@ -202,8 +202,7 @@ public class MainFrame extends JFrame implements ActionListener {
     progressBar.setAlignmentX(Component.LEFT_ALIGNMENT);
 
     // Log console
-    console = new JConsole(10, 20);
-    console.setEditable(false);
+    console = new JConsole();
     console.setVisible(false);
     console.setAlignmentX(Component.LEFT_ALIGNMENT);
   }
@@ -275,6 +274,7 @@ public class MainFrame extends JFrame implements ActionListener {
     authenticationForm.clear();
     username.clear();
     password.clear();
+    console.clear();
   }
 
   private void runEmailTask() {
@@ -326,6 +326,10 @@ public class MainFrame extends JFrame implements ActionListener {
     if (!debug.isSelected()) {
       console.getLoggingHandler().flush();
     }
+
+    revalidate();
+    repaint();
+    pack();
   }
 
   private void exportProperties() {
