@@ -20,8 +20,7 @@ public class EmailPropertiesConverter implements Converter<EmailData, Properties
     }
 
     if (emailData.isUsingSSL()) {
-      properties.put("mail.smtp.socketFactory.port", emailData.getPort());
-      properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+      properties.setProperty("mail.smtp.ssl.enable", "true");
     } else if (emailData.isUsingTLS()) {
       properties.put("mail.smtp.starttls.enable", "true");
     }

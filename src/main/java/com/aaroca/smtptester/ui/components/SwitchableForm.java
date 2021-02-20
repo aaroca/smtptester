@@ -88,6 +88,10 @@ public class SwitchableForm extends JComponent implements ChangeListener {
     return this.checkBox.isSelected();
   }
 
+  public void setSelected(boolean selected) {
+    this.checkBox.setSelected(selected);
+  }
+
   public JCheckBox getEventSource() {
     return checkBox;
   }

@@ -31,9 +31,11 @@ public final class Constants {
     }
 
     public static final String DEFAULT_CONTENT = "test";
-    public static final String HTML_MIMETYPE = "text/html";
+    public static final String HTML_MIMETYPE = "text/html;charset=UTF-8";
     public static final Integer DEFAULT_PORT = 25;
     public static final Integer DEFAULT_SSL_PORT = 465;
     public static final Integer DEFAULT_TLS_PORT = 587;
+    public static final Integer DEFAULT_TIMEOUT = 1000;
+    public static final Integer[] TIMEOUT_OPTIONS = new Integer[] {DEFAULT_TIMEOUT, 1500, 2000};
   }
 }

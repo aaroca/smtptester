@@ -18,7 +18,9 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -35,6 +37,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
   private JMenuBar mainMenu;
   private JMenu fileMenu;
+  private JComboBox<Integer> timeoutComboBox;
   private JMenuItem exportMenuItem;
   private JMenuItem exitMenuItem;
   private JPanel panel;
@@ -115,6 +118,8 @@ public class MainFrame extends JFrame implements ActionListener {
     // Menu
     mainMenu = new JMenuBar();
     fileMenu = new JMenu("File");
+    timeoutComboBox = new JComboBox<>(Mail.TIMEOUT_OPTIONS);
+    timeoutComboBox.setEditable(true);
     exportMenuItem = new JMenuItem("Export");
     exportMenuItem.addActionListener(this);
     exitMenuItem = new JMenuItem("Exit");
@@ -124,6 +129,8 @@ public class MainFrame extends JFrame implements ActionListener {
     fileMenu.addSeparator();
     fileMenu.add(exitMenuItem);
     mainMenu.add(fileMenu);
+    mainMenu.add(new JLabel("Timeout (ms)"));
+    mainMenu.add(timeoutComboBox);
 
     // Panel
     panel = new JPanel();
@@ -186,9 +193,14 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // Basic details
     panel.add(host);
-    panel.add(port);
-    panel.add(useTLS);
-    panel.add(useSSL);
+
+    JPanel portOptions = new JPanel(new FlowLayout(FlowLayout.LEADING));
+    portOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
+    portOptions.add(port);
+    portOptions.add(useTLS);
+    portOptions.add(useSSL);
+
+    panel.add(portOptions);
     panel.add(from);
     panel.add(to);
 
@@ -217,8 +229,9 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   private void clear() {
+    timeoutComboBox.setSelectedIndex(0);
     host.clear();
-    port.clear();
+    port.setText(Mail.DEFAULT_PORT.toString());
     useTLS.setSelected(false);
     useSSL.setSelected(false);
     to.clear();
@@ -259,6 +272,7 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     useTLS.setSelected(false);
+    forceAuthentication();
   }
 
   private void useTLS() {
@@ -267,6 +281,13 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     useSSL.setSelected(false);
+    forceAuthentication();
+  }
+
+  private void forceAuthentication() {
+    if (!authenticationForm.isSelected()) {
+      authenticationForm.setSelected(true);
+    }
   }
 
   private void exportProperties() {

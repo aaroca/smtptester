@@ -17,6 +17,7 @@ public class EmailData {
   private String password;
   private Boolean useTLS;
   private Boolean useSSL;
+  private Integer timeout;
 
   public String getHost() {
     return host;
@@ -120,5 +121,13 @@ public class EmailData {
 
   public void setUseSSL(Boolean useSSL) {
     this.useSSL = useSSL;
+  }
+
+  public Integer getTimeout() {
+    return timeout;
+  }
+
+  public void setTimeout(Integer timeout) {
+    this.timeout = timeout;
   }
 }
