@@ -23,8 +23,8 @@ public class JConsole extends JScrollPane {
     this.loggingHandler = new JConsoleLoggingHandler(this.logArea);
 
     setViewportView(this.logArea);
-    setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
+    setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
     setBorder(BorderFactory.createTitledBorder(getI18nService().getString("main.trace")));
   }
 

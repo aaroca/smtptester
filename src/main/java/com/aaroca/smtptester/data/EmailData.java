@@ -8,17 +8,17 @@ public class EmailData {
   private String port;
   private String to;
   private String from;
-  private Boolean detailedMessage;
+  private boolean detailedMessage;
   private String subject;
   private String body;
   private File attachment;
-  private Boolean useAuthentication;
+  private boolean useAuthentication;
   private String username;
   private String password;
-  private Boolean useTLS;
-  private Boolean useSSL;
+  private boolean useTLS;
+  private boolean useSSL;
   private Integer timeout;
-  private Boolean debug;
+  private boolean debug;
 
   public String getHost() {
     return host;
@@ -52,11 +52,11 @@ public class EmailData {
     this.from = from;
   }
 
-  public Boolean isDetailedMessage() {
+  public boolean isDetailedMessage() {
     return detailedMessage;
   }
 
-  public void setDetailedMessage(Boolean detailedMessage) {
+  public void setDetailedMessage(boolean detailedMessage) {
     this.detailedMessage = detailedMessage;
   }
 
@@ -84,11 +84,11 @@ public class EmailData {
     this.attachment = attachment;
   }
 
-  public Boolean isUsingAuthentication() {
+  public boolean isUsingAuthentication() {
     return useAuthentication;
   }
 
-  public void setUseAuthentication(Boolean useAuthentication) {
+  public void setUseAuthentication(boolean useAuthentication) {
     this.useAuthentication = useAuthentication;
   }
 
@@ -108,19 +108,19 @@ public class EmailData {
     this.password = password;
   }
 
-  public Boolean isUsingTLS() {
+  public boolean isUsingTLS() {
     return useTLS;
   }
 
-  public void setUseTLS(Boolean useTLS) {
+  public void setUseTLS(boolean useTLS) {
     this.useTLS = useTLS;
   }
 
-  public Boolean isUsingSSL() {
+  public boolean isUsingSSL() {
     return useSSL;
   }
 
-  public void setUseSSL(Boolean useSSL) {
+  public void setUseSSL(boolean useSSL) {
     this.useSSL = useSSL;
   }
 
@@ -132,11 +132,11 @@ public class EmailData {
     this.timeout = timeout;
   }
 
-  public Boolean isDebugEnabled() {
+  public boolean isDebugEnabled() {
     return debug;
   }
 
-  public void setDebug(Boolean debug) {
+  public void setDebug(boolean debug) {
     this.debug = debug;
   }
 }
