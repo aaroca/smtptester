@@ -11,14 +11,13 @@ import com.aaroca.smtptester.ui.components.JConsole;
 import com.aaroca.smtptester.ui.components.SwitchableForm;
 import com.aaroca.smtptester.utils.Constants.Mail;
 import com.aaroca.smtptester.utils.Constants.Ui;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -34,6 +33,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker.StateValue;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.swing.IconFontSwing;
 import org.apache.commons.lang3.StringUtils;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -64,6 +65,7 @@ public class MainFrame extends JFrame implements ActionListener {
   private JButton sendEmail;
   private JButton clearForm;
   private JCheckBox debug;
+  private JLabel debugTooltip;
   private JProgressBar progressBar;
   private JConsole console;
 
@@ -79,7 +81,7 @@ public class MainFrame extends JFrame implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent event) {
     final Object eventSource = event.getSource();
-    
+
     if (eventSource == clearForm) {
       clear();
     } else if (eventSource == sendEmail) {
@@ -164,6 +166,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // Email details form
     subject = new FormField(getI18nService().getString("main.subject"));
+    subject.setText(Mail.DEFAULT_CONTENT);
     body = new FormField(getI18nService().getString("main.body"), new JTextArea(5, 20));
     body.setText(Mail.DEFAULT_CONTENT);
     attachment = new FileChooserField(getI18nService().getString("main.attachment"));
@@ -196,6 +199,10 @@ public class MainFrame extends JFrame implements ActionListener {
     clearForm.addActionListener(this);
     debug = new JCheckBox(getI18nService().getString("main.debug"));
     debug.addActionListener(this);
+    debugTooltip = new JLabel(
+        IconFontSwing
+            .buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, Ui.SMALL_ICON_SIZE, Color.YELLOW));
+    debugTooltip.setToolTipText(getI18nService().getString("main.debug.tooltip"));
     progressBar = new JProgressBar();
     progressBar.setIndeterminate(true);
     progressBar.setVisible(false);
@@ -241,6 +248,7 @@ public class MainFrame extends JFrame implements ActionListener {
     buttonsPanel.add(sendEmail);
     buttonsPanel.add(clearForm);
     buttonsPanel.add(debug);
+    buttonsPanel.add(debugTooltip);
     panel.add(buttonsPanel);
 
     add(progressBar);
@@ -268,7 +276,7 @@ public class MainFrame extends JFrame implements ActionListener {
     to.setText(Mail.DEFAULT_EMAIL);
     from.setText(Mail.DEFAULT_EMAIL);
     emailDetailsForm.clear();
-    subject.clear();
+    subject.setText(Mail.DEFAULT_CONTENT);
     body.setText(Mail.DEFAULT_CONTENT);
     attachment.clear();
     authenticationForm.clear();

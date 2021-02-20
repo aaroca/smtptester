@@ -8,15 +8,20 @@ import com.aaroca.smtptester.services.I18nService;
 import com.aaroca.smtptester.utils.Constants.Mail;
 import com.aaroca.smtptester.utils.streams.MailDebugStream;
 import java.util.Properties;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import org.apache.commons.lang3.StringUtils;
+import javax.mail.internet.MimeMultipart;
 
 public class DefaultEmailService implements EmailService {
 
@@ -66,12 +71,41 @@ public class DefaultEmailService implements EmailService {
 
     message.setFrom(new InternetAddress(email.getFrom()));
     message.setRecipients(RecipientType.TO, InternetAddress.parse(email.getTo()));
-    message.setContent(StringUtils.defaultString(email.getBody(), Mail.DEFAULT_CONTENT),
-        Mail.HTML_MIMETYPE);
 
+    addMessageContent(email, message);
+
+    return message;
+  }
+
+  private Message addMessageContent(EmailData email, Message message) throws MessagingException {
     if (email.isDetailedMessage()) {
       message.setSubject(email.getSubject());
+    } else {
+      message.setSubject(Mail.DEFAULT_CONTENT);
     }
+
+    Multipart messageContent = new MimeMultipart();
+
+    BodyPart messageBody = new MimeBodyPart();
+    String body;
+
+    if (email.isDetailedMessage()) {
+      body = email.getBody();
+    } else {
+      body = Mail.DEFAULT_CONTENT;
+    }
+
+    messageBody.setContent(body, Mail.HTML_MIMETYPE);
+    messageContent.addBodyPart(messageBody);
+
+    if (email.isDetailedMessage() && email.getAttachment() != null) {
+      BodyPart messageAttachment = new MimeBodyPart();
+      messageAttachment.setDataHandler(new DataHandler(new FileDataSource(email.getAttachment())));
+      messageAttachment.setFileName(email.getAttachment().getName());
+      messageContent.addBodyPart(messageAttachment);
+    }
+
+    message.setContent(messageContent);
 
     return message;
   }
