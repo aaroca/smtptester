@@ -57,6 +57,8 @@ public class ResponseDialog extends JDialog {
     status.setAlignmentX(Component.LEFT_ALIGNMENT);
     status.setIconTextGap(Ui.DEFAULT_SEPARATION);
     exception = new JTextArea();
+    exception
+        .setBorder(BorderFactory.createTitledBorder(getI18nService().getString("response.trace")));
     exception.setAlignmentX(Component.LEFT_ALIGNMENT);
     exception.setEditable(false);
     exception.setRows(5);
