@@ -32,6 +32,7 @@ public final class Constants {
 
     public static final String DEFAULT_CONTENT = "test";
     public static final String HTML_MIMETYPE = "text/html;charset=UTF-8";
+    public static final String DEFAULT_EMAIL = "test@mail.com";
     public static final Integer DEFAULT_PORT = 25;
     public static final Integer DEFAULT_SSL_PORT = 465;
     public static final Integer DEFAULT_TLS_PORT = 587;

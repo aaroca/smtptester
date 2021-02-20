@@ -67,6 +67,11 @@ public class FormField extends JComponent {
     field.setToolTipText(tooltip);
   }
 
+  @Override
+  public void requestFocus() {
+    field.requestFocus();
+  }
+
   public void setInfo(String info) {
     if (StringUtils.isNotEmpty(info)) {
       if (this.info == null) {

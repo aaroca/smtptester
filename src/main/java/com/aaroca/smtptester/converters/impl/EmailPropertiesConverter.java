@@ -25,6 +25,8 @@ public class EmailPropertiesConverter implements Converter<EmailData, Properties
       properties.put("mail.smtp.starttls.enable", "true");
     }
 
+    properties.put("mail.smtp.connectiontimeout", emailData.getTimeout());
+
     return properties;
   }
 }

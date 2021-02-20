@@ -13,6 +13,8 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.concurrent.ExecutionException;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -108,6 +110,12 @@ public class MainFrame extends JFrame implements ActionListener {
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     setResizable(false);
+    addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowOpened(WindowEvent event) {
+        host.requestFocus();
+      }
+    });
   }
 
   private void buildComponents() {
@@ -117,19 +125,19 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // Menu
     mainMenu = new JMenuBar();
-    fileMenu = new JMenu("File");
+    fileMenu = new JMenu(getI18nService().getString("main.file"));
     timeoutComboBox = new JComboBox<>(Mail.TIMEOUT_OPTIONS);
     timeoutComboBox.setEditable(true);
-    exportMenuItem = new JMenuItem("Export");
+    exportMenuItem = new JMenuItem(getI18nService().getString("main.export"));
     exportMenuItem.addActionListener(this);
-    exitMenuItem = new JMenuItem("Exit");
+    exitMenuItem = new JMenuItem(getI18nService().getString("main.exit"));
     exitMenuItem.addActionListener(this);
 
     fileMenu.add(exportMenuItem);
     fileMenu.addSeparator();
     fileMenu.add(exitMenuItem);
     mainMenu.add(fileMenu);
-    mainMenu.add(new JLabel("Timeout (ms)"));
+    mainMenu.add(new JLabel(getI18nService().getString("main.timeout")));
     mainMenu.add(timeoutComboBox);
 
     // Panel
@@ -140,43 +148,45 @@ public class MainFrame extends JFrame implements ActionListener {
             Ui.DEFAULT_SEPARATION));
 
     // Basic details
-    host = new FormField("Host");
-    port = new FormField("Port");
+    host = new FormField(getI18nService().getString("main.host"));
+    port = new FormField(getI18nService().getString("main.port"));
     port.setText(Mail.DEFAULT_PORT.toString());
-    from = new FormField("From");
-    to = new FormField("To");
-    to.setInfo("Separate with , for sending several emails");
+    from = new FormField(getI18nService().getString("main.from"));
+    from.setText(Mail.DEFAULT_EMAIL);
+    to = new FormField(getI18nService().getString("main.to"));
+    to.setText(Mail.DEFAULT_EMAIL);
+    to.setInfo(getI18nService().getString("main.to.tooltip"));
 
     // Email details form
-    subject = new FormField("Subject");
-    body = new FormField("Body", new JTextArea(4, 20));
-    attachment = new FileChooserField("Attachment");
-    emailDetailsForm = new SwitchableForm("Set email details",
-        "Email details",
+    subject = new FormField(getI18nService().getString("main.subject"));
+    body = new FormField(getI18nService().getString("main.body"), new JTextArea(4, 20));
+    attachment = new FileChooserField(getI18nService().getString("main.attachment"));
+    emailDetailsForm = new SwitchableForm(getI18nService().getString("main.details.check"),
+        getI18nService().getString("main.details"),
         subject,
         body,
         attachment);
 
     // Authentication form
-    username = new FormField("Username");
-    password = new FormField("Password", new JPasswordField(20));
-    authenticationForm = new SwitchableForm("Use authentication",
-        "Authentication",
+    username = new FormField(getI18nService().getString("main.username"));
+    password = new FormField(getI18nService().getString("main.password"), new JPasswordField(20));
+    authenticationForm = new SwitchableForm(getI18nService().getString("main.authentication.check"),
+        getI18nService().getString("main.authentication"),
         username,
         password);
 
     // Use TLS form
-    useTLS = new JCheckBox("Use TLS");
+    useTLS = new JCheckBox(getI18nService().getString("main.tls"));
     useTLS.addActionListener(this);
 
     // Use SSL form
-    useSSL = new JCheckBox("Use SSL");
+    useSSL = new JCheckBox(getI18nService().getString("main.ssl"));
     useSSL.addActionListener(this);
 
     // Buttons
-    sendEmail = new JButton(getI18nService().getString("send"));
+    sendEmail = new JButton(getI18nService().getString("main.send"));
     sendEmail.addActionListener(this);
-    clearForm = new JButton("Clear");
+    clearForm = new JButton(getI18nService().getString("main.clear"));
     clearForm.addActionListener(this);
     progressBar = new JProgressBar();
     progressBar.setIndeterminate(true);
@@ -234,8 +244,8 @@ public class MainFrame extends JFrame implements ActionListener {
     port.setText(Mail.DEFAULT_PORT.toString());
     useTLS.setSelected(false);
     useSSL.setSelected(false);
-    to.clear();
-    from.clear();
+    to.setText(Mail.DEFAULT_EMAIL);
+    from.setText(Mail.DEFAULT_EMAIL);
     emailDetailsForm.clear();
     subject.clear();
     body.clear();
@@ -272,7 +282,6 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     useTLS.setSelected(false);
-    forceAuthentication();
   }
 
   private void useTLS() {
@@ -281,13 +290,6 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     useSSL.setSelected(false);
-    forceAuthentication();
-  }
-
-  private void forceAuthentication() {
-    if (!authenticationForm.isSelected()) {
-      authenticationForm.setSelected(true);
-    }
   }
 
   private void exportProperties() {
@@ -311,8 +313,15 @@ public class MainFrame extends JFrame implements ActionListener {
     email.setPassword(password.getText());
     email.setUseTLS(useTLS.isSelected());
     email.setUseSSL(useSSL.isSelected());
+    email.setTimeout(getTimeout());
 
     return email;
+  }
+
+  private Integer getTimeout() {
+    return timeoutComboBox.getSelectedItem() instanceof Integer
+        ? (Integer) timeoutComboBox.getSelectedItem()
+        : Mail.DEFAULT_TIMEOUT;
   }
 
   protected I18nService getI18nService() {
