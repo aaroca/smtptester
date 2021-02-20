@@ -115,6 +115,11 @@ public class MainFrame extends JFrame implements ActionListener {
       public void windowOpened(WindowEvent event) {
         host.requestFocus();
       }
+
+      @Override
+      public void windowActivated(WindowEvent event) {
+        host.requestFocus();
+      }
     });
   }
 
