@@ -18,6 +18,7 @@ public class EmailData {
   private Boolean useTLS;
   private Boolean useSSL;
   private Integer timeout;
+  private Boolean debug;
 
   public String getHost() {
     return host;
@@ -129,5 +130,13 @@ public class EmailData {
 
   public void setTimeout(Integer timeout) {
     this.timeout = timeout;
+  }
+
+  public Boolean isDebugEnabled() {
+    return debug;
+  }
+
+  public void setDebug(Boolean debug) {
+    this.debug = debug;
   }
 }

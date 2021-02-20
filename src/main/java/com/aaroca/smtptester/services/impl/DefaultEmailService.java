@@ -6,6 +6,7 @@ import com.aaroca.smtptester.data.ResponseData;
 import com.aaroca.smtptester.services.EmailService;
 import com.aaroca.smtptester.services.I18nService;
 import com.aaroca.smtptester.utils.Constants.Mail;
+import com.aaroca.smtptester.utils.streams.MailDebugStream;
 import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -22,12 +23,14 @@ public class DefaultEmailService implements EmailService {
   private final Converter<EmailData, Properties> propertiesConverter;
   private final Converter<EmailData, Authenticator> authenticatorConverter;
   private final I18nService i18nService;
+  private final MailDebugStream debugStream;
 
   public DefaultEmailService(Converter<EmailData, Properties> propertiesConverter,
       Converter<EmailData, Authenticator> authenticatorConverter) {
     this.propertiesConverter = propertiesConverter;
     this.authenticatorConverter = authenticatorConverter;
     this.i18nService = DefaultI18nService.getInstance();
+    this.debugStream = new MailDebugStream();
   }
 
   @Override
@@ -35,6 +38,7 @@ public class DefaultEmailService implements EmailService {
     ResponseData response = null;
 
     Session session = createSession(email);
+    session.setDebugOut(getDebugStream());
 
     try {
       Message message = createMessage(email, session);
@@ -82,5 +86,9 @@ public class DefaultEmailService implements EmailService {
 
   protected I18nService getI18nService() {
     return i18nService;
+  }
+
+  protected MailDebugStream getDebugStream() {
+    return debugStream;
   }
 }

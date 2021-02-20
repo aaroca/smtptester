@@ -27,6 +27,10 @@ public class EmailPropertiesConverter implements Converter<EmailData, Properties
 
     properties.put("mail.smtp.connectiontimeout", emailData.getTimeout());
 
+    if (emailData.isDebugEnabled()) {
+      properties.put("mail.debug", "true");
+    }
+
     return properties;
   }
 }

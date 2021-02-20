@@ -7,6 +7,7 @@ import com.aaroca.smtptester.services.impl.DefaultI18nService;
 import com.aaroca.smtptester.tasks.EmailSenderTask;
 import com.aaroca.smtptester.ui.components.FileChooserField;
 import com.aaroca.smtptester.ui.components.FormField;
+import com.aaroca.smtptester.ui.components.JConsole;
 import com.aaroca.smtptester.ui.components.SwitchableForm;
 import com.aaroca.smtptester.utils.Constants.Mail;
 import com.aaroca.smtptester.utils.Constants.Ui;
@@ -14,9 +15,10 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -61,7 +63,9 @@ public class MainFrame extends JFrame implements ActionListener {
   private JCheckBox useSSL;
   private JButton sendEmail;
   private JButton clearForm;
+  private JCheckBox debug;
   private JProgressBar progressBar;
+  private JConsole console;
 
   public MainFrame() {
     i18nService = DefaultI18nService.getInstance();
@@ -69,22 +73,27 @@ public class MainFrame extends JFrame implements ActionListener {
     init();
     buildComponents();
     addComponents();
+    addLoggerHandler();
   }
 
   @Override
   public void actionPerformed(ActionEvent event) {
-    if (event.getSource() == clearForm) {
+    final Object eventSource = event.getSource();
+    
+    if (eventSource == clearForm) {
       clear();
-    } else if (event.getSource() == sendEmail) {
+    } else if (eventSource == sendEmail) {
       runEmailTask();
-    } else if (event.getSource() == useTLS) {
+    } else if (eventSource == useTLS) {
       useTLS();
-    } else if (event.getSource() == useSSL) {
+    } else if (eventSource == useSSL) {
       useSSL();
-    } else if (event.getSource() == exportMenuItem) {
+    } else if (eventSource == exportMenuItem) {
       exportProperties();
-    } else if (event.getSource() == exitMenuItem) {
+    } else if (eventSource == exitMenuItem) {
       dispose();
+    } else if (eventSource == debug) {
+      toggleConsole();
     }
   }
 
@@ -155,7 +164,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // Email details form
     subject = new FormField(getI18nService().getString("main.subject"));
-    body = new FormField(getI18nService().getString("main.body"), new JTextArea(4, 20));
+    body = new FormField(getI18nService().getString("main.body"), new JTextArea(5, 20));
     body.setText(Mail.DEFAULT_CONTENT);
     attachment = new FileChooserField(getI18nService().getString("main.attachment"));
     emailDetailsForm = new SwitchableForm(getI18nService().getString("main.details.check"),
@@ -185,10 +194,22 @@ public class MainFrame extends JFrame implements ActionListener {
     sendEmail.addActionListener(this);
     clearForm = new JButton(getI18nService().getString("main.clear"));
     clearForm.addActionListener(this);
+    debug = new JCheckBox("Enable debug");
+    debug.addActionListener(this);
     progressBar = new JProgressBar();
     progressBar.setIndeterminate(true);
     progressBar.setVisible(false);
     progressBar.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+    // Log console
+    console = new JConsole(10, 20);
+    console.setEditable(false);
+    console.setVisible(false);
+    console.setAlignmentX(Component.LEFT_ALIGNMENT);
+  }
+
+  private void addLoggerHandler() {
+    LogManager.getLogManager().getLogger(StringUtils.EMPTY).addHandler(console.getLoggingHandler());
   }
 
   private void addComponents() {
@@ -220,9 +241,13 @@ public class MainFrame extends JFrame implements ActionListener {
     buttonsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
     buttonsPanel.add(sendEmail);
     buttonsPanel.add(clearForm);
-
+    buttonsPanel.add(debug);
     panel.add(buttonsPanel);
+
     add(progressBar);
+
+    // Log console
+    add(console);
   }
 
   private void displayProgressBar() {
@@ -295,6 +320,14 @@ public class MainFrame extends JFrame implements ActionListener {
     useSSL.setSelected(false);
   }
 
+  private void toggleConsole() {
+    console.setVisible(debug.isSelected());
+
+    if (!debug.isSelected()) {
+      console.getLoggingHandler().flush();
+    }
+  }
+
   private void exportProperties() {
     propertiesDialog.exportProperties(collectEmailData());
     propertiesDialog.pack();
@@ -317,6 +350,7 @@ public class MainFrame extends JFrame implements ActionListener {
     email.setUseTLS(useTLS.isSelected());
     email.setUseSSL(useSSL.isSelected());
     email.setTimeout(getTimeout());
+    email.setDebug(debug.isSelected());
 
     return email;
   }
