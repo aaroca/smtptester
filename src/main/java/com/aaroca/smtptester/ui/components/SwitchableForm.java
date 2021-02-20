@@ -29,7 +29,7 @@ public class SwitchableForm extends JComponent implements ChangeListener {
   @Override
   public void stateChanged(ChangeEvent event) {
     if (event.getSource() == checkBox) {
-      toggle();
+      toggle(checkBox.isSelected());
     }
   }
 
@@ -38,8 +38,7 @@ public class SwitchableForm extends JComponent implements ChangeListener {
     super.setEnabled(enabled);
 
     checkBox.setEnabled(enabled);
-    contentPanel.setEnabled(enabled);
-    fields.forEach(field -> field.setEnabled(enabled));
+    toggle(enabled && checkBox.isSelected());
   }
 
   public void clear() {
@@ -79,9 +78,9 @@ public class SwitchableForm extends JComponent implements ChangeListener {
     });
   }
 
-  private void toggle() {
-    contentPanel.setEnabled(checkBox.isSelected());
-    fields.forEach(field -> field.setEnabled(checkBox.isSelected()));
+  private void toggle(Boolean enabled) {
+    contentPanel.setEnabled(enabled);
+    fields.forEach(field -> field.setEnabled(enabled));
   }
 
   public boolean isSelected() {

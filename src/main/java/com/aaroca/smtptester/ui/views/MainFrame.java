@@ -1,6 +1,7 @@
 package com.aaroca.smtptester.ui.views;
 
 import com.aaroca.smtptester.data.EmailData;
+import com.aaroca.smtptester.data.ResponseData;
 import com.aaroca.smtptester.services.I18nService;
 import com.aaroca.smtptester.services.impl.DefaultI18nService;
 import com.aaroca.smtptester.tasks.EmailSenderTask;
@@ -165,6 +166,7 @@ public class MainFrame extends JFrame implements ActionListener {
     // Email details form
     subject = new FormField(getI18nService().getString("main.subject"));
     body = new FormField(getI18nService().getString("main.body"), new JTextArea(4, 20));
+    body.setText(Mail.DEFAULT_CONTENT);
     attachment = new FileChooserField(getI18nService().getString("main.attachment"));
     emailDetailsForm = new SwitchableForm(getI18nService().getString("main.details.check"),
         getI18nService().getString("main.details"),
@@ -253,7 +255,7 @@ public class MainFrame extends JFrame implements ActionListener {
     from.setText(Mail.DEFAULT_EMAIL);
     emailDetailsForm.clear();
     subject.clear();
-    body.clear();
+    body.setText(Mail.DEFAULT_CONTENT);
     attachment.clear();
     authenticationForm.clear();
     username.clear();
@@ -268,17 +270,23 @@ public class MainFrame extends JFrame implements ActionListener {
       if (StringUtils.equals(taskEvent.getPropertyName(), "state")
           && StateValue.DONE.equals(taskEvent.getNewValue())) {
         try {
-          hideProgressBar();
-
-          responseDialog.setResponseData(task.get());
-          responseDialog.pack();
-          responseDialog.setVisible(true);
+          displayResponse(task.get());
         } catch (InterruptedException | ExecutionException exception) {
-          exception.printStackTrace();
+          ResponseData error = new ResponseData(false, exception.getLocalizedMessage());
+          error.setException(exception);
+          displayResponse(error);
         }
       }
     });
     task.execute();
+  }
+
+  private void displayResponse(ResponseData responseData) {
+    hideProgressBar();
+
+    responseDialog.setResponseData(responseData);
+    responseDialog.pack();
+    responseDialog.setVisible(true);
   }
 
   private void useSSL() {

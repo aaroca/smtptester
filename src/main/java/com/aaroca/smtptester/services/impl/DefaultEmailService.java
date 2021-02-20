@@ -14,6 +14,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import org.apache.commons.lang3.StringUtils;
 
 public class DefaultEmailService implements EmailService {
 
@@ -58,11 +59,11 @@ public class DefaultEmailService implements EmailService {
 
     message.setFrom(new InternetAddress(email.getFrom()));
     message.setRecipients(RecipientType.TO, InternetAddress.parse(email.getTo()));
-    message.setContent(Mail.DEFAULT_CONTENT, Mail.HTML_MIMETYPE);
+    message.setContent(StringUtils.defaultString(email.getBody(), Mail.DEFAULT_CONTENT),
+        Mail.HTML_MIMETYPE);
 
     if (email.isDetailedMessage()) {
       message.setSubject(email.getSubject());
-      message.setContent(email.getBody(), Mail.HTML_MIMETYPE);
     }
 
     return message;
