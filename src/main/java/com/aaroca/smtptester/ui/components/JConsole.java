@@ -4,21 +4,29 @@ import com.aaroca.smtptester.services.I18nService;
 import com.aaroca.smtptester.services.impl.DefaultI18nService;
 import com.aaroca.smtptester.utils.Constants.Ui;
 import com.aaroca.smtptester.utils.logging.JConsoleLoggingHandler;
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import jiconfont.icons.font_awesome.FontAwesome;
 import jiconfont.swing.IconFontSwing;
 
 public class JConsole extends JPanel implements ActionListener {
+
+  private static final String EXTENSION = "log";
 
   private final I18nService i18nService;
 
@@ -28,6 +36,7 @@ public class JConsole extends JPanel implements ActionListener {
   private JScrollPane scrollPane;
   private JTextArea logArea;
   private JConsoleLoggingHandler loggingHandler;
+  private JFileChooser fileBrowser;
 
   public JConsole() {
     this.i18nService = DefaultI18nService.getInstance();
@@ -46,12 +55,12 @@ public class JConsole extends JPanel implements ActionListener {
     } else if (eventSource == clearLogButton) {
       clear();
     } else if (eventSource == saveLogButton) {
-
+      saveLog();
     }
   }
 
   private void init() {
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    setLayout(new BorderLayout());
     setBorder(BorderFactory.createTitledBorder(getI18nService().getString("main.trace")));
   }
 
@@ -80,17 +89,22 @@ public class JConsole extends JPanel implements ActionListener {
     this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
     this.loggingHandler = new JConsoleLoggingHandler(this.logArea);
+
+    this.fileBrowser = new JFileChooser();
+    this.fileBrowser.setFileFilter(
+        new FileNameExtensionFilter(getI18nService().getString("console.save.filter"), EXTENSION));
   }
 
   private void addComponents() {
-    JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    buttonsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    buttonsPanel.add(scrollToBottomButton);
-    buttonsPanel.add(clearLogButton);
-    buttonsPanel.add(saveLogButton);
+    JMenuBar logOptionsBar = new JMenuBar();
+    logOptionsBar.add(scrollToBottomButton);
+    logOptionsBar.add(clearLogButton);
+    logOptionsBar.add(saveLogButton);
+    logOptionsBar.setOpaque(false);
+    logOptionsBar.setBorderPainted(false);
 
-    add(buttonsPanel);
-    add(scrollPane);
+    add(logOptionsBar, BorderLayout.NORTH);
+    add(scrollPane, BorderLayout.CENTER);
   }
 
   private void clear() {
@@ -98,7 +112,24 @@ public class JConsole extends JPanel implements ActionListener {
   }
 
   private void scrollToBottom() {
-    logArea.setCaretPosition(logArea.getDocument().getLength());
+    scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+  }
+
+  private void saveLog() {
+    if (fileBrowser.showSaveDialog(saveLogButton) == JFileChooser.APPROVE_OPTION) {
+      File selectedFile = fileBrowser.getSelectedFile();
+
+      try {
+        String fileName = selectedFile.getCanonicalPath();
+        if (!fileName.endsWith(EXTENSION)) {
+          selectedFile = new File(fileName + "." + EXTENSION);
+        }
+        Files.write(selectedFile.toPath(), logArea.getText().getBytes(StandardCharsets.UTF_8),
+            StandardOpenOption.CREATE);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   protected I18nService getI18nService() {
