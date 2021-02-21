@@ -2,6 +2,8 @@ package com.aaroca.smtptester.ui.components;
 
 import static com.aaroca.smtptester.utils.Constants.Ui.DEFAULT_TEXT_SIZE;
 
+import com.aaroca.smtptester.services.I18nService;
+import com.aaroca.smtptester.services.impl.DefaultI18nService;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class FileChooserField extends JComponent implements ActionListener {
 
+  private final I18nService i18nService;
+
   private JLabel label;
   private JTextField path;
   private JButton selectButton;
@@ -23,6 +27,8 @@ public class FileChooserField extends JComponent implements ActionListener {
   private File selectedFile;
 
   public FileChooserField(String label) {
+    this.i18nService = DefaultI18nService.getInstance();
+
     init();
     buildComponents(label);
     addComponents();
@@ -55,7 +61,7 @@ public class FileChooserField extends JComponent implements ActionListener {
     this.label = new JLabel(label);
     path = new JTextField(DEFAULT_TEXT_SIZE);
     path.setEnabled(false);
-    selectButton = new JButton("Select");
+    selectButton = new JButton(getI18nService().getString("filechooser.select"));
     selectButton.addActionListener(this);
     fileBrowser = new JFileChooser();
     fileBrowser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -75,6 +81,10 @@ public class FileChooserField extends JComponent implements ActionListener {
       selectedFile = fileBrowser.getSelectedFile();
       path.setText(selectedFile.getAbsolutePath());
     }
+  }
+
+  protected I18nService getI18nService() {
+    return i18nService;
   }
 
   public File getFile() {

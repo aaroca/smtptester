@@ -1,4 +1,4 @@
-package com.aaroca.smtptester.utils.streams;
+package com.aaroca.smtptester.utils.io;
 
 import static java.util.logging.Level.INFO;
 

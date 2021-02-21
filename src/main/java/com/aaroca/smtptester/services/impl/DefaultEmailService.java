@@ -6,7 +6,7 @@ import com.aaroca.smtptester.data.ResponseData;
 import com.aaroca.smtptester.services.EmailService;
 import com.aaroca.smtptester.services.I18nService;
 import com.aaroca.smtptester.utils.Constants.Mail;
-import com.aaroca.smtptester.utils.streams.MailDebugStream;
+import com.aaroca.smtptester.utils.io.MailDebugStream;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;

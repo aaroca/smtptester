@@ -282,7 +282,6 @@ public class MainFrame extends JFrame implements ActionListener {
     authenticationForm.clear();
     username.clear();
     password.clear();
-    console.clear();
   }
 
   private void runEmailTask() {

@@ -1,5 +1,7 @@
 package com.aaroca.smtptester.utils;
 
+import java.awt.Color;
+
 public final class Constants {
 
   private Constants() {
@@ -23,6 +25,7 @@ public final class Constants {
     public static final Integer DEFAULT_ICON_SIZE = 20;
     public static final Integer SMALL_ICON_SIZE = 15;
     public static final Integer EXTRA_SMALL_ICON_SIZE = 10;
+    public static final Color BUTTON_COLOR = new Color(173, 173, 173);
   }
 
   public static final class Mail {
