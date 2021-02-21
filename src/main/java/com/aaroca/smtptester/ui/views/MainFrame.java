@@ -133,7 +133,6 @@ public class MainFrame extends JFrame implements ActionListener {
     mainMenu = new JMenuBar();
     fileMenu = new JMenu(getI18nService().getString("main.file"));
     timeoutComboBox = new JComboBox<>(Mail.TIMEOUT_OPTIONS);
-    timeoutComboBox.setEditable(true);
     timeoutComboBox.setFocusable(false);
     exportMenuItem = new JMenuItem(getI18nService().getString("main.export"));
     exportMenuItem.addActionListener(this);
