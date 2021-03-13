@@ -1,9 +1,11 @@
 package com.aaroca.smtptester.data;
 
 import java.io.File;
+import picocli.CommandLine.Option;
 
 public class EmailData {
 
+  @Option(names = {"-s", "--host"}, required = true, descriptionKey = "main.host.help")
   private String host;
   private String port;
   private String to;

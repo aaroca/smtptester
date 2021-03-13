@@ -1,6 +1,6 @@
 package com.aaroca.smtptester;
 
-import com.aaroca.smtptester.cli.TesterCommand;
+import com.aaroca.smtptester.cli.MainCommand;
 import com.aaroca.smtptester.ui.views.MainFrame;
 import com.aaroca.smtptester.utils.Constants.Ui;
 import com.formdev.flatlaf.FlatDarculaLaf;
@@ -36,7 +36,7 @@ public class App {
   }
 
   private void run(String[] args) {
-    int exitCode = new CommandLine(new TesterCommand()).execute(args);
+    int exitCode = new CommandLine(new MainCommand()).execute(args);
     System.exit(exitCode);
   }
 }
