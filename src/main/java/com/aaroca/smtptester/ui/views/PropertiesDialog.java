@@ -39,7 +39,7 @@ public class PropertiesDialog extends JDialog implements ActionListener {
     super(owner, "", true);
 
     i18nService = DefaultI18nService.getInstance();
-    propertiesConverter = new EmailPropertiesConverter();
+    propertiesConverter = EmailPropertiesConverter.getInstance();
 
     init();
     buildComponents();
