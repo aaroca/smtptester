@@ -13,6 +13,15 @@ public final class Constants {
     }
 
     public static final String DEFAULT_I18N_BASENAME = "i18n/messages";
+    public static final String APP_PROPERTIES = "app.properties";
+
+    public static final class Properties {
+
+      private Properties() {
+      }
+
+      public static final String VERSION = "version";
+    }
   }
 
   public static final class Ui {
@@ -37,9 +46,11 @@ public final class Constants {
     public static final String HTML_MIMETYPE = "text/html;charset=UTF-8";
     public static final String DEFAULT_EMAIL = "test@mail.com";
     public static final Integer DEFAULT_PORT = 25;
+    public static final String DEFAULT_PORT_COMMAND = "25";
     public static final Integer DEFAULT_SSL_PORT = 465;
     public static final Integer DEFAULT_TLS_PORT = 587;
     public static final Integer DEFAULT_TIMEOUT = 1000;
+    public static final String DEFAULT_TIMEOUT_COMMAND = "1000";
     public static final Integer[] TIMEOUT_OPTIONS = new Integer[] {DEFAULT_TIMEOUT, 1500, 2000};
   }
 }

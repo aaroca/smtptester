@@ -8,6 +8,20 @@ import javax.mail.PasswordAuthentication;
 
 public class EmailAuthenticationConverter implements Converter<EmailData, Authenticator> {
 
+  private static Converter<EmailData, Authenticator> INSTANCE;
+
+  private EmailAuthenticationConverter() {
+
+  }
+
+  public static Converter<EmailData, Authenticator> getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new EmailAuthenticationConverter();
+    }
+
+    return INSTANCE;
+  }
+
   @Override
   public Authenticator convert(EmailData emailData) {
     Objects.requireNonNull(emailData);

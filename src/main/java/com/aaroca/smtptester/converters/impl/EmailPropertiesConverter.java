@@ -7,6 +7,20 @@ import java.util.Properties;
 
 public class EmailPropertiesConverter implements Converter<EmailData, Properties> {
 
+  private static Converter<EmailData, Properties> INSTANCE;
+  
+  private EmailPropertiesConverter() {
+
+  }
+
+  public static Converter<EmailData, Properties> getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new EmailPropertiesConverter();
+    }
+
+    return INSTANCE;
+  }
+
   @Override
   public Properties convert(EmailData emailData) {
     Objects.requireNonNull(emailData);

@@ -1,23 +1,85 @@
 package com.aaroca.smtptester.data;
 
+import com.aaroca.smtptester.utils.Constants.Mail;
 import java.io.File;
+import picocli.CommandLine.Help.Visibility;
+import picocli.CommandLine.Option;
 
 public class EmailData {
 
+  @Option(names = {"-s", "--host"},
+      required = true,
+      descriptionKey = "main.host.help")
   private String host;
+
+  @Option(names = {"-p", "--port"},
+      defaultValue = Mail.DEFAULT_PORT_COMMAND,
+      fallbackValue = Mail.DEFAULT_PORT_COMMAND,
+      showDefaultValue = Visibility.ALWAYS,
+      descriptionKey = "main.port.help")
   private String port;
+
+  @Option(names = {"-t", "--to"},
+      defaultValue = Mail.DEFAULT_EMAIL,
+      fallbackValue = Mail.DEFAULT_EMAIL,
+      showDefaultValue = Visibility.ALWAYS,
+      descriptionKey = "main.to.help")
   private String to;
+
+  @Option(names = {"-f", "--from"},
+      defaultValue = Mail.DEFAULT_EMAIL,
+      fallbackValue = Mail.DEFAULT_EMAIL,
+      showDefaultValue = Visibility.ALWAYS,
+      descriptionKey = "main.from.help")
   private String from;
+
   private boolean detailedMessage;
+
+  @Option(names = {"-j", "--subject"},
+      defaultValue = Mail.DEFAULT_CONTENT,
+      fallbackValue = Mail.DEFAULT_CONTENT,
+      showDefaultValue = Visibility.ALWAYS,
+      descriptionKey = "main.subject.help")
   private String subject;
+
+  @Option(names = {"-b", "--body"},
+      defaultValue = Mail.DEFAULT_CONTENT,
+      fallbackValue = Mail.DEFAULT_CONTENT,
+      showDefaultValue = Visibility.ALWAYS,
+      descriptionKey = "main.body.help")
   private String body;
+
+  @Option(names = {"-a", "--attachment"},
+      descriptionKey = "main.attachment.help")
   private File attachment;
+
   private boolean useAuthentication;
+
+  @Option(names = {"-u", "--username"},
+      descriptionKey = "main.username.help")
   private String username;
+
+  @Option(names = {"-w", "--password"},
+      descriptionKey = "main.password.help")
   private String password;
+
+  @Option(names = {"--tls"},
+      descriptionKey = "main.tls.help")
   private boolean useTLS;
+
+  @Option(names = {"--ssl"},
+      descriptionKey = "main.ssl.help")
   private boolean useSSL;
+
+  @Option(names = {"-o", "--timeout"},
+      defaultValue = Mail.DEFAULT_TIMEOUT_COMMAND,
+      fallbackValue = Mail.DEFAULT_TIMEOUT_COMMAND,
+      showDefaultValue = Visibility.ALWAYS,
+      descriptionKey = "main.timeout.help")
   private Integer timeout;
+
+  @Option(names = {"-d", "--debug"},
+      descriptionKey = "main.debug.help")
   private boolean debug;
 
   public String getHost() {

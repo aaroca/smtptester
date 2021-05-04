@@ -1,6 +1,8 @@
 package com.aaroca.smtptester.services.impl;
 
 import com.aaroca.smtptester.converters.Converter;
+import com.aaroca.smtptester.converters.impl.EmailAuthenticationConverter;
+import com.aaroca.smtptester.converters.impl.EmailPropertiesConverter;
 import com.aaroca.smtptester.data.EmailData;
 import com.aaroca.smtptester.data.ResponseData;
 import com.aaroca.smtptester.services.EmailService;
@@ -25,17 +27,26 @@ import javax.mail.internet.MimeMultipart;
 
 public class DefaultEmailService implements EmailService {
 
+  private static EmailService INSTANCE;
+
   private final Converter<EmailData, Properties> propertiesConverter;
   private final Converter<EmailData, Authenticator> authenticatorConverter;
   private final I18nService i18nService;
   private final MailDebugStream debugStream;
 
-  public DefaultEmailService(Converter<EmailData, Properties> propertiesConverter,
-      Converter<EmailData, Authenticator> authenticatorConverter) {
-    this.propertiesConverter = propertiesConverter;
-    this.authenticatorConverter = authenticatorConverter;
+  private DefaultEmailService() {
+    this.propertiesConverter = EmailPropertiesConverter.getInstance();
+    this.authenticatorConverter = EmailAuthenticationConverter.getInstance();
     this.i18nService = DefaultI18nService.getInstance();
     this.debugStream = new MailDebugStream();
+  }
+
+  public static EmailService getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new DefaultEmailService();
+    }
+
+    return INSTANCE;
   }
 
   @Override
