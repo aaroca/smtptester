@@ -17,7 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
 
-@Command(mixinStandardHelpOptions = true,
+@Command(name = "java -jar smtptester.jar",
+    mixinStandardHelpOptions = true,
     resourceBundle = App.DEFAULT_I18N_BASENAME,
     versionProvider = MavenVersionProvider.class)
 public class MainCommand implements Callable<Integer> {
