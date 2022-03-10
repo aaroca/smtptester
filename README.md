@@ -27,5 +27,5 @@ Run the following command to get a list of parameters.
 `java -jar smtptester-1.1.0.jar -h`
 
 ### Quick Run on Linux
-wget https://github.com/aaroca/smtptester/releases/download/1.1.0/smtptester-1.1.0.jar
-java -jar smtptester-1.1.0.jar -d -s smtp.domain.com -t user@domain.com
+
+wget https://github.com/aaroca/smtptester/releases/download/1.1.0/smtptester-1.1.0.jar && java -jar smtptester-1.1.0.jar -d -s smtp.domain.com -t user@domain.com
