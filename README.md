@@ -3,7 +3,7 @@ Simple java app to test smtp server connection.
 
 ### Why use smtptester
 1. Can run with GUI and CLI both
-2. Better than google's [woodpecker-tester](https://code.google.com/archive/p/woodpecker-tester/){: target="_blank"}
+2. Better than google's [woodpecker-tester](https://code.google.com/archive/p/woodpecker-tester/)
 3. Can work with or without Authentication
 
 ### Requirements
